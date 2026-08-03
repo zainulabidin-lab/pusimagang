@@ -193,28 +193,30 @@ const Logbook: React.FC = () => {
     const activeFiltersCount = (searchQuery ? 1 : 0) + (statusFilter ? 1 : 0);
 
     const renderEntryDetails = (entry: LogbookEntry) => (
-        <div style={{ marginTop: 'var(--space-8)', display: 'flex', flexDirection: 'column', gap: 'var(--space-12)' }}>
-            <p style={{ color: 'var(--text-main)', fontSize: 'var(--font-size-body)', lineHeight: 1.6 }}>{entry.activity}</p>
+        <div style={{ marginTop: 'var(--space-8)', display: 'flex', flexDirection: 'column', gap: 'var(--space-16)' }}>
+            <p style={{ color: 'var(--text-main)', fontSize: 'var(--font-size-body)', fontWeight: 500, lineHeight: 1.6 }}>{entry.activity}</p>
             
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-12)' }}>
                 {entry.result && (
                     <div style={{ padding: 'var(--space-12)', backgroundColor: 'var(--success-light)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
                         <h5 style={{ fontSize: 'var(--font-size-caption)', color: 'var(--success)', fontWeight: 600, textTransform: 'uppercase', marginBottom: '4px' }}>Results</h5>
-                        <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-main)' }}>{entry.result}</p>
+                        <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-main)', margin: 0 }}>{entry.result}</p>
                     </div>
                 )}
                 {entry.obstacle && (
                     <div style={{ padding: 'var(--space-12)', backgroundColor: 'var(--danger-light)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
                         <h5 style={{ fontSize: 'var(--font-size-caption)', color: 'var(--danger)', fontWeight: 600, textTransform: 'uppercase', marginBottom: '4px' }}>Challenges</h5>
-                        <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-main)' }}>{entry.obstacle}</p>
+                        <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-main)', margin: 0 }}>{entry.obstacle}</p>
                     </div>
                 )}
             </div>
 
             {entry.documentation_path && (
                 <div style={{ marginTop: 'var(--space-8)' }}>
-                    <h5 style={{ fontSize: 'var(--font-size-caption)', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', marginBottom: '8px' }}>Documentation</h5>
-                    <img src={entry.documentation_path} alt="Documentation" style={{ maxWidth: '300px', width: '100%', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }} />
+                    <h5 style={{ fontSize: 'var(--font-size-caption)', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>Documentation</h5>
+                    <div style={{ width: '100%', maxWidth: '480px', height: '240px', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid var(--border)' }}>
+                        <img src={entry.documentation_path} alt="Documentation" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
                 </div>
             )}
 
@@ -328,14 +330,14 @@ const Logbook: React.FC = () => {
                                 </h3>
                                 <Timeline items={internEntries.map((entry: any) => ({
                                     title: (
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-8)' }}>
-                                            <span>{new Date(entry.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-12)' }}>
+                                            <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{new Date(entry.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
                                             {getStatusBadge(entry.status || 'pending')}
                                         </div>
                                     ),
                                     time: (
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-16)', color: 'var(--text-muted)' }}>
-                                            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={12}/> {entry.start_time?.substring(0,5) || entry.time} - {entry.end_time?.substring(0,5) || 'Done'}</span>
+                                            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={14}/> {entry.start_time?.substring(0,5) || entry.time} - {entry.end_time?.substring(0,5) || 'Done'}</span>
                                             {getMoodEmoji(entry.mood)}
                                         </div>
                                     ),
