@@ -1,9 +1,45 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import fs from 'fs'
+import path from 'path'
+
+// Custom plugin to copy files to Laravel public directory
+function copyToLaravel() {
+  return {
+    name: 'copy-to-laravel',
+    closeBundle() {
+      const src = path.resolve(__dirname, 'dist');
+      const dest = path.resolve(__dirname, '../backend/public');
+      
+      console.log(`\n[Auto-Sync] Menyalin hasil build ke backend/public...`);
+      
+      const copyRecursiveSync = (src: string, dest: string) => {
+        const exists = fs.existsSync(src);
+        const stats = exists && fs.statSync(src);
+        const isDirectory = exists && stats.isDirectory();
+        if (isDirectory) {
+          if (!fs.existsSync(dest)) fs.mkdirSync(dest);
+          fs.readdirSync(src).forEach((childItemName: string) => {
+            copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName));
+          });
+        } else {
+          fs.copyFileSync(src, dest);
+        }
+      };
+      
+      try {
+        copyRecursiveSync(src, dest);
+        console.log('[Auto-Sync] Berhasil disalin!');
+      } catch (err) {
+        console.error('[Auto-Sync] Gagal menyalin:', err);
+      }
+    }
+  }
+}
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), copyToLaravel()],
   server: {
     port: 80,
     host: true,
