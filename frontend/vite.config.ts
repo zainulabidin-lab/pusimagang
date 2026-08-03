@@ -14,9 +14,9 @@ function copyToLaravel() {
       console.log(`\n[Auto-Sync] Menyalin hasil build ke backend/public...`);
       
       const copyRecursiveSync = (src: string, dest: string) => {
-        const exists = fs.existsSync(src);
-        const stats = exists && fs.statSync(src);
-        const isDirectory = exists && stats.isDirectory();
+        if (!fs.existsSync(src)) return;
+        const stats = fs.statSync(src);
+        const isDirectory = stats.isDirectory();
         if (isDirectory) {
           if (!fs.existsSync(dest)) fs.mkdirSync(dest);
           fs.readdirSync(src).forEach((childItemName: string) => {
