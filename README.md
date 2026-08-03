@@ -1,76 +1,74 @@
-# 🎓 PUSIM Magang Enterprise (V1.2)
+# 🎓 PUSIM Magang Enterprise (v2.0)
 
-Selamat datang di repositori **PUSIM Magang**, sebuah platform Sistem Manajemen Magang Terpadu berskala *Enterprise* yang dirancang khusus untuk memonitor, mengelola, dan mengevaluasi kinerja anak magang di Pusat Sistem Informasi (PUSIM).
+![CI/CD Pipeline](https://github.com/zainulabidin-lab/pusimagang/actions/workflows/ci.yml/badge.svg)
 
-Aplikasi ini dibangun menggunakan arsitektur modern (API-driven) yang memisahkan antara backend dan frontend untuk skalabilitas dan performa maksimal.
+Selamat datang di repositori **PUSIM Magang Enterprise v2.0**, sebuah platform Sistem Manajemen Magang Terpadu berskala *Enterprise* yang dirancang khusus untuk memonitor, mengelola, dan mengevaluasi kinerja anak magang di Pusat Sistem Informasi (PUSIM).
+
+Aplikasi ini dibangun menggunakan arsitektur modern (API-driven) dan telah melalui perombakan UI/UX besar-besaran (Phase 5) untuk menghadirkan pengalaman pengguna sekelas aplikasi enterprise profesional (terinspirasi dari Linear, Notion, dan Vercel).
 
 ---
 
 ## 🚀 Teknologi Utama (Tech Stack)
 
 Aplikasi ini mengadopsi tumpukan teknologi modern:
-- **Backend (API):** Laravel 11 (PHP 8.2+) dengan sistem autentikasi Laravel Sanctum.
+- **Backend (API):** Laravel 11 (PHP 8.2+) dengan autentikasi Sanctum.
 - **Frontend (SPA):** React 18, TypeScript, dan Vite bundler.
-- **Styling:** CSS Murni dengan sistem variabel CSS kustom (*Modern UI, Glassmorphism, Animations*).
+- **Styling:** Vanilla CSS dengan arsitektur Design System kustom (*Design Tokens, Glassmorphism, Micro-animations*).
+- **Komponen UI:** Custom Enterprise Component Library (Drawer, Timeline, FilterBar, StepProgress, Bento Grid).
 - **Icons:** Lucide React.
 - **Database:** MySQL.
+- **CI/CD:** GitHub Actions (Otomatisasi Build & Testing).
 
 ---
 
-## 🌟 Modul & Fitur Utama
+## 🌟 Fitur & Pengalaman Pengguna Baru (v2.0)
 
-Sistem ini menerapkan **Role-Based Access Control (RBAC)** secara ketat, membedakan hak akses dan antarmuka antara `admin`, `mentor`, dan `intern` (anak magang).
+Pembaruan v2.0 berfokus pada **Enterprise Workflow Experience**, meminimalkan *click*, memandu pengguna secara natural, dan menerapkan prinsip *progressive disclosure*.
 
-### 1. Dashboard Interaktif 📊
-- Ringkasan metrik kinerja (Task aktif, selesai, terlambat, dll).
-- Indikator progres penyelesaian magang berbentuk lingkaran (*Circular Progress Bar*).
-- Panel khusus Mentor untuk memantau performa tiap anak magang bimbingannya.
+### 1. Executive Dashboard (Mission Control) 📊
+- Desain *Bento Grid* premium yang responsif.
+- **Dynamic Hero Section:** Menyapa pengguna sesuai waktu dan role.
+- **Visual Analytics:** Grafik aktivitas mingguan dan distribusi tugas (menggunakan Recharts).
+- **Action Center & Timeline:** Daftar *deadline* terdekat dan umpan aktivitas *real-time*.
 
 ### 2. Task Board (Manajemen Tugas Kanban & Kolaborasi) 📝
-- Sistem *Kanban Board* (Todo, In Progress, Review, Done) bergaya Trello.
-- **Tugas Kolaboratif:** Mentor dapat menugaskan satu *Task* kepada lebih dari satu anak magang sekaligus (Multi-Assign). Anak magang juga dapat mengundang teman satu timnya untuk mengerjakan tugas bersama.
-- Fitur *Checklist* di dalam setiap Task untuk memecah tugas besar menjadi langkah kecil.
-- *Activity Log* spesifik pada setiap Task.
+- Sistem *Kanban Board* (Todo, In Progress, Review, Done).
+- **Contextual Drawers:** Pembuatan dan detail tugas kini menggunakan *side drawer*, sehingga pengguna tidak kehilangan konteks dari papan Kanban.
+- **Visual Approval Workflow:** Indikator progres langkah demi langkah (Assigned -> In Progress -> Under Review -> Done).
+- **Tugas Kolaboratif (Multi-Assign):** Mentor dapat menugaskan satu *Task* kepada banyak anak magang sekaligus.
 
-### 3. Logbook Harian (Jurnal Kehadiran) 📖
-- Pengganti absensi manual. Anak magang wajib mengisi aktivitas yang dilakukan beserta hambatannya setiap hari (Default jam 07:30 - 15:00).
-- Dilengkapi dengan *upload* foto dokumentasi (kompresi otomatis) dan pelaporan *Mood* harian.
-- **Smart View:** Tampilan daftar logbook akan dikelompokkan (Grouped) berdasarkan nama anak magang jika diakses oleh Mentor/Admin, sehingga mempermudah *tracking* performa tiap individu.
-- Mentor dapat memberikan catatan (notes) dan status Approve/Reject pada logbook anak magang.
+### 3. Logbook Harian (Timeline Interaktif) 📖
+- Dirombak dari tampilan daftar biasa menjadi **Timeline Layout** yang elegan.
+- **Smart Filtering:** Dilengkapi *FilterBar* terpadu untuk pencarian dan penyaringan berdasarkan status.
+- Anak magang melaporkan aktivitas, hambatan, foto dokumentasi, dan pelaporan *Mood* harian melalui Drawer.
+- Mentor dapat memberikan catatan (notes) dan status *Approve/Reject* dengan cepat.
 
-### 4. SOP Management (Pusat Standar Operasional) 📋 *(Baru)*
-- Menu khusus untuk Admin & Mentor mengelola *Task Templates*.
-- Memudahkan pembuatan tugas dengan menyediakan SOP yang sudah tersistem (misal: SOP Setup Lokal, SOP Instalasi Windows, SOP TKJ Mikrotik, dll).
-- Saat membuat *Task* baru, *checklist* akan terisi otomatis berdasarkan SOP yang dipilih.
+### 4. Penilaian Akhir (Progressive Evaluation) 🏅
+- Menggunakan *Step-by-step Wizard* (Intern -> Scores -> Review) untuk mengisi rubrik penilaian.
+- Visualisasi nilai akhir (A, B, C, D) menggunakan *Circular Progress* yang dinamis.
+- Cetak Laporan (Print to PDF) resmi ber-kop surat PUSIM.
 
-### 5. Gamifikasi (Sistem Poin & Badge) 🏆
+### 5. Registrasi & SOP Management 📋
+- **Registration Wizard:** Registrasi kini dibagi menjadi 3 langkah progresif (Akun -> Edukasi -> Konfirmasi) untuk mengurangi beban kognitif pengguna.
+- **SOP Templates:** Modul manajemen standar operasional untuk mempercepat pembuatan tugas yang berulang, lengkap dengan *checklist* otomatis.
+
+### 6. Gamifikasi (Sistem Poin & Badge) 🏆
 - Peningkatan motivasi melalui sistem apresiasi otomatis:
-  - **+10 Poin** untuk setiap penyelesaian Task.
-  - **+2 Poin** untuk setiap pengisian Logbook harian.
-- Pemberian *Badge* gelar secara otomatis (Rising Star, Pro, Expert, Legend).
-- **Leaderboard** (Papan Peringkat) Top 5 anak magang ditampilkan di Dashboard.
-
-### 6. Penilaian Akhir & Rapor (Evaluation) 🏅
-- Modul *grading* bagi Mentor untuk menilai 4 aspek: **Teknis, Komunikasi, Disiplin, dan Problem Solving**.
-- Sistem kalkulasi *Final Grade* (A, B, C, D) otomatis.
-- **Cetak Laporan (Print to PDF)** berformat A4 resmi ber-kop surat PUSIM, berisi rincian nilai, portofolio task, logbook, dan tanda tangan digital.
-
-### 7. Activity Feed & Smart Notifications 🔔
-- Umpan aktivitas (Activity Feed) layaknya linimasa sosial media yang merekam jejak audit semua pengguna (pembuatan tugas, perubahan status, dll).
-- Notifikasi lonceng dinamis (*real-time UX*) di Topbar untuk memberitahu anak magang apabila tugas disetujui atau mendapat poin baru.
+  - **+10 Poin** (Task) dan **+2 Poin** (Logbook).
+- Pemberian *Badge* gelar secara otomatis (Rising Star, Pro, Expert, Legend) yang dipajang di *Leaderboard* Dashboard.
 
 ---
 
 ## 📂 Struktur Direktori Proyek
 
-Proyek ini dipisah menjadi dua *folder* utama di dalam direktori `pusimmagang`:
+Proyek ini dipisah menjadi dua *folder* utama di dalam repositori:
 
 1. `/backend` (Laravel API)
    - Menyediakan RESTful API berformat JSON.
-   - Mengatur validasi bisnis, migrasi database, dan manipulasi data.
 2. `/frontend` (React SPA)
-   - Bertindak sebagai klien yang mengkonsumsi API.
-   - Bertanggung jawab penuh terhadap visual (UI/UX) dan *routing* aplikasi (React Router).
+   - Bertindak sebagai klien yang mengkonsumsi API, berisi *Enterprise Component Library* (di `src/components/ui`).
+3. `/.github/workflows`
+   - Berisi file konfigurasi GitHub Actions (`ci.yml`) untuk CI/CD.
 
 ---
 
@@ -81,6 +79,10 @@ Pastikan layanan database MySQL (Laragon/XAMPP) sudah berjalan.
 **1. Menjalankan Backend:**
 Buka terminal baru di *folder* `backend`, lalu jalankan:
 ```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
 php artisan serve --port=8080
 ```
 *(Backend API akan berjalan di http://127.0.0.1:8080)*
@@ -88,10 +90,11 @@ php artisan serve --port=8080
 **2. Menjalankan Frontend:**
 Buka terminal baru di *folder* `frontend`, lalu jalankan:
 ```bash
+npm install
 npm run dev
 ```
 *(Frontend UI akan berjalan di alamat lokal yang diberikan Vite, biasanya http://localhost:5173)*
 
 ---
 
-*Didokumentasikan secara otomatis pada tanggal 30 Juli 2026. Aplikasi ini siap digunakan dan terus dikembangkan untuk mendukung produktivitas magang di lingkungan PUSIM.*
+*Pembaruan v2.0 didokumentasikan pada bulan Agustus 2026. PUSIM Magang Enterprise terus dikembangkan untuk menjadi standar emas dalam manajemen magang industri.*
