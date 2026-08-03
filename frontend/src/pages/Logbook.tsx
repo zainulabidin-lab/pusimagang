@@ -255,7 +255,7 @@ const Logbook: React.FC = () => {
     );
 
     return (
-        <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 'var(--space-24)' }}>
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 'var(--space-24)' }}>
             
             {/* Header Area */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
