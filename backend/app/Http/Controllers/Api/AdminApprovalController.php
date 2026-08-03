@@ -16,7 +16,7 @@ class AdminApprovalController extends Controller
 
         $interns = User::where('role', 'intern')
             ->where('is_approved', false)
-            ->with(['internProfile.school', 'internProfile.major'])
+            ->with(['internProfile'])
             ->get();
 
         return response()->json(['data' => $interns]);

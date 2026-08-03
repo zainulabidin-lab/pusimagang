@@ -4,7 +4,6 @@ import api from '../services/api';
 import { Network, ChevronRight, CheckCircle } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
-import { Select } from '../components/ui/Select';
 import { StepProgress } from '../components/ui/Progress';
 import { Alert } from '../components/ui/Alert';
 
@@ -13,33 +12,13 @@ const Register: React.FC = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [schoolId, setSchoolId] = useState('');
-    const [majorId, setMajorId] = useState('');
-    
-    const [schools, setSchools] = useState<any[]>([]);
-    const [majors, setMajors] = useState<any[]>([]);
+    const [schoolName, setSchoolName] = useState('');
+    const [majorName, setMajorName] = useState('');
     
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const fetchMasterData = async () => {
-            try {
-                const resSchools = await api.get('/master/schools');
-                const resMajors = await api.get('/master/majors');
-                setSchools(resSchools.data.data);
-                setMajors(resMajors.data.data);
-                
-                if (resSchools.data.data.length > 0) setSchoolId(resSchools.data.data[0].id.toString());
-                if (resMajors.data.data.length > 0) setMajorId(resMajors.data.data[0].id.toString());
-            } catch (err) {
-                console.error("Failed to fetch master data", err);
-            }
-        };
-        fetchMasterData();
-    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -49,7 +28,7 @@ const Register: React.FC = () => {
                 setError('Mohon lengkapi semua data akun.');
                 return;
             }
-            if (step === 2 && (!schoolId || !majorId)) {
+            if (step === 2 && (!schoolName || !majorName)) {
                 setError('Mohon pilih asal sekolah dan jurusan.');
                 return;
             }
@@ -65,8 +44,8 @@ const Register: React.FC = () => {
                 name, 
                 email, 
                 password, 
-                school_id: schoolId, 
-                major_id: majorId 
+                school_name: schoolName, 
+                major_name: majorName  
             });
             setSuccess(response.data.message);
             setTimeout(() => navigate('/login'), 3000);
@@ -126,18 +105,20 @@ const Register: React.FC = () => {
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-16)' }}>
                                 <div>
                                     <label style={{ display: 'block', marginBottom: '8px', fontSize: 'var(--font-size-sm)', fontWeight: 500 }}>Asal Sekolah / Universitas</label>
-                                    <Select 
-                                        value={schoolId} 
-                                        onChange={(e) => setSchoolId(e.target.value)}
-                                        options={schools.map(s => ({ value: s.id, label: s.name }))}
+                                    <Input 
+                                        value={schoolName} 
+                                        onChange={(e) => setSchoolName(e.target.value)}
+                                        placeholder="Contoh: SMK Telkom Malang"
+                                        fullWidth
                                     />
                                 </div>
                                 <div>
                                     <label style={{ display: 'block', marginBottom: '8px', fontSize: 'var(--font-size-sm)', fontWeight: 500 }}>Jurusan</label>
-                                    <Select 
-                                        value={majorId} 
-                                        onChange={(e) => setMajorId(e.target.value)}
-                                        options={majors.map(m => ({ value: m.id, label: m.name }))}
+                                    <Input 
+                                        value={majorName} 
+                                        onChange={(e) => setMajorName(e.target.value)}
+                                        placeholder="Contoh: Rekayasa Perangkat Lunak"
+                                        fullWidth
                                     />
                                 </div>
                             </div>
@@ -164,7 +145,7 @@ const Register: React.FC = () => {
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                         <span style={{ color: 'var(--text-muted)' }}>Sekolah:</span>
-                                        <span style={{ fontWeight: 500 }}>{schools.find(s=>s.id.toString()===schoolId)?.name}</span>
+                                        <span style={{ fontWeight: 500 }}>{schoolName}</span>
                                     </div>
                                 </div>
                             </div>

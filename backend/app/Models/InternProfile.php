@@ -13,10 +13,10 @@ class InternProfile extends Model
     protected $fillable = [
         'user_id',
         'mentor_id',
-        'school_id',
+        'school_name',
         'points',
         'badge',
-        'major_id',
+        'major_name',
         'start_date',
         'end_date',
         'address',
@@ -32,16 +32,6 @@ class InternProfile extends Model
     public function mentor()
     {
         return $this->belongsTo(User::class, 'mentor_id');
-    }
-
-    public function school()
-    {
-        return $this->belongsTo(School::class);
-    }
-
-    public function major()
-    {
-        return $this->belongsTo(Major::class);
     }
 
     public function division()

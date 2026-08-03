@@ -17,8 +17,8 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
-            'school_id' => 'required|exists:schools,id',
-            'major_id' => 'required|exists:majors,id',
+            'school_name' => 'required|string|max:255',
+            'major_name' => 'required|string|max:255',
         ]);
 
         $user = User::create([
@@ -31,8 +31,8 @@ class RegisterController extends Controller
 
         InternProfile::create([
             'user_id' => $user->id,
-            'school_id' => $request->school_id,
-            'major_id' => $request->major_id,
+            'school_name' => $request->school_name,
+            'major_name' => $request->major_name,
             'status' => 'active', // Active profile but user needs approval
         ]);
 

@@ -64,8 +64,8 @@ class DatabaseSeeder extends Seeder
         $internProfile1 = InternProfile::create([
             'user_id' => $intern1->id,
             'mentor_id' => $mentor1->id,
-            'school_id' => $school1->id,
-            'major_id' => $major1->id,
+            'school_name' => 'SMK Telkom Malang',
+            'major_name' => 'Rekayasa Perangkat Lunak',
             'division_id' => $div1->id,
             'phone' => '08987654321',
             'start_date' => '2026-07-01',
