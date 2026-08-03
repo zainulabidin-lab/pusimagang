@@ -1,0 +1,106 @@
+/* ==========================================
+   TOAST COMPONENT
+   Premium SaaS Design Language
+   ========================================== */
+
+   .ds-toast-container {
+    position: fixed;
+    bottom: var(--space-24);
+    right: var(--space-24);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    z-index: 9999;
+    pointer-events: none; /* Let clicks pass through empty space */
+  }
+  
+  .ds-toast {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-12);
+    width: 320px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-16);
+    box-shadow: var(--shadow-floating);
+    pointer-events: auto;
+    animation: ds-toast-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .ds-toast.closing {
+    animation: ds-toast-slide-out 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .ds-toast-icon-container {
+    flex-shrink: 0;
+  }
+  
+  .ds-toast-icon.success { color: var(--success); }
+  .ds-toast-icon.error { color: var(--danger); }
+  .ds-toast-icon.warning { color: var(--warning); }
+  .ds-toast-icon.info { color: var(--primary); }
+  
+  .ds-toast-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .ds-toast-title {
+    font-size: var(--font-size-button);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-main);
+    line-height: 1.2;
+  }
+  
+  .ds-toast-message {
+    font-size: var(--font-size-caption);
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  
+  .ds-toast-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    margin: -4px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, color 0.2s;
+    flex-shrink: 0;
+  }
+  
+  .ds-toast-close:hover {
+    background-color: var(--surface-hover);
+    color: var(--text-main);
+  }
+  
+  @keyframes ds-toast-slide-in {
+    from {
+      opacity: 0;
+      transform: translateX(100%) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+  }
+  
+  @keyframes ds-toast-slide-out {
+    from {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translateX(100%) scale(0.95);
+    }
+  }

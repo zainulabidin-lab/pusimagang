@@ -1,0 +1,270 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ==========================================
+   PUSIM Academic Enterprise Design System
+   ========================================== */
+
+:root {
+  /* --- COLOR TOKENS (LIGHT THEME) --- */
+  
+  /* Brand */
+  --primary: #0F52BA; /* Academic Sapphire Blue */
+  --primary-hover: #0a3d8c;
+  --primary-active: #072a63;
+  
+  --secondary: #475569; /* Professional Slate */
+  --secondary-hover: #334155;
+  --secondary-active: #1e293b;
+
+  /* Backgrounds */
+  --background: #F8FAFC;
+  --surface: #FFFFFF;
+  --surface-hover: #F1F5F9;
+  
+  /* Semantics */
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --info: #3B82F6;
+  
+  /* Text */
+  --text-main: #0F172A;
+  --text-muted: #64748B;
+  --text-disabled: #94A3B8;
+  
+  /* States & Borders */
+  --border: #E2E8F0;
+  --divider: #F1F5F9;
+  --disabled: #E2E8F0;
+  --focus-ring: rgba(15, 82, 186, 0.2);
+  --overlay: rgba(15, 23, 42, 0.5);
+
+  /* --- TYPOGRAPHY TOKENS --- */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  
+  --font-size-display: 3rem;      /* 48px */
+  --font-size-heading: 2.25rem;   /* 36px */
+  --font-size-title: 1.5rem;      /* 24px */
+  --font-size-subtitle: 1.25rem;  /* 20px */
+  --font-size-body: 1rem;         /* 16px */
+  --font-size-button: 0.875rem;   /* 14px */
+  --font-size-label: 0.875rem;    /* 14px */
+  --font-size-table: 0.875rem;    /* 14px */
+  --font-size-caption: 0.75rem;   /* 12px */
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* --- SPACING TOKENS (8px Grid) --- */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --space-64: 64px;
+  --space-80: 80px;
+  --space-96: 96px;
+
+  /* --- RADIUS TOKENS --- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* --- SHADOW TOKENS --- */
+  --shadow-very-soft: 0 1px 2px 0 rgb(0 0 0 / 0.02);
+  --shadow-soft: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -1px rgb(0 0 0 / 0.03);
+  --shadow-medium: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -2px rgb(0 0 0 / 0.04);
+  --shadow-floating: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
+  --shadow-modal: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-dropdown: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+
+  /* --- ELEVATION (Z-INDEX) TOKENS --- */
+  --z-base: 0;
+  --z-dropdown: 40;
+  --z-sticky: 50;
+  --z-overlay: 100;
+  --z-modal: 105;
+  --z-popover: 110;
+  --z-toast: 120;
+
+  /* --- ANIMATION TOKENS --- */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* --- BORDER & OPACITY TOKENS --- */
+  --border-width-sm: 1px;
+  --border-width-md: 2px;
+  --opacity-disabled: 0.5;
+  --opacity-hover: 0.8;
+
+  /* --- ICON SIZES --- */
+  --icon-sm: 16px;
+  --icon-md: 20px;
+  --icon-lg: 24px;
+  --icon-hero: 48px;
+}
+
+/* ==========================================
+   DARK THEME TOKENS
+   ========================================== */
+[data-theme="dark"] {
+  --background: #0F172A;
+  --surface: #1E293B;
+  --surface-hover: #334155;
+  
+  --primary: #3B82F6; /* Lighter primary for contrast */
+  --primary-hover: #60A5FA;
+  --primary-active: #2563EB;
+  
+  --secondary: #94A3B8;
+  --secondary-hover: #CBD5E1;
+  --secondary-active: #64748B;
+
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --text-disabled: #475569;
+  
+  --border: #334155;
+  --divider: #1E293B;
+  --disabled: #334155;
+  --overlay: rgba(0, 0, 0, 0.7);
+
+  --shadow-very-soft: 0 1px 2px 0 rgba(0,0,0, 0.5);
+  --shadow-soft: 0 4px 6px -1px rgba(0,0,0, 0.6);
+  --shadow-medium: 0 10px 15px -3px rgba(0,0,0, 0.7);
+  --shadow-floating: 0 20px 25px -5px rgba(0,0,0, 0.8);
+  --shadow-modal: 0 25px 50px -12px rgba(0,0,0, 0.9);
+  --shadow-dropdown: 0 10px 15px -3px rgba(0,0,0, 0.8);
+}
+
+/* ==========================================
+   RESPONSIVE BREAKPOINTS (CSS Media Queries usage)
+   --bp-mobile: 480px;
+   --bp-tablet: 768px;
+   --bp-laptop: 1024px;
+   --bp-desktop: 1280px;
+   ========================================== */
+
+/* ==========================================
+   BASE STYLES & RESET
+   ========================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--background);
+  color: var(--text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: var(--font-size-body);
+}
+
+/* Focus Accessibility */
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* 
+  Legacy fallback styles for components not yet refactored.
+  Do not add new business logic classes here. 
+  Use the new UI components instead.
+*/
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  border: var(--border-width-sm) solid var(--border);
+  padding: var(--space-24);
+  transition: all var(--transition-normal);
+}
+.card:hover {
+    box-shadow: var(--shadow-medium);
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-16);
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: var(--border-width-sm) solid transparent;
+  font-size: var(--font-size-button);
+}
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+}
+.input-control {
+    padding: var(--space-8) var(--space-12);
+    border-radius: var(--radius-md);
+    border: var(--border-width-sm) solid var(--border);
+    background-color: var(--surface);
+    font-size: var(--font-size-body);
+    transition: all var(--transition-fast);
+    color: var(--text-main);
+}
+.input-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: var(--space-2);
+        flex-direction: row;
+        align-items: center;
+        overflow-x: auto;
+    }
+    .nav-links {
+        flex-direction: row;
+        margin-top: 0;
+        gap: var(--space-2);
+    }
+    .nav-item {
+        padding: var(--space-1) var(--space-2);
+        justify-content: center;
+    }
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-2);
+    }
+    .topbar {
+        padding: var(--space-2);
+    }
+    .page-content {
+        padding: var(--space-2);
+    }
+}

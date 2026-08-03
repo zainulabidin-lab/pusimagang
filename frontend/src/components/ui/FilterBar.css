@@ -1,0 +1,55 @@
+/* ==========================================
+   FILTER BAR COMPONENT
+   Premium SaaS Design Language
+   ========================================== */
+
+   .ds-filter-bar {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-16);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+  }
+  
+  .ds-filter-bar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--space-12);
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .ds-filter-bar-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-main);
+  }
+  
+  .ds-filter-badge {
+    background-color: rgba(15, 82, 186, 0.1);
+    color: var(--primary);
+    font-size: 0.7rem;
+    font-weight: var(--font-weight-bold);
+    padding: 2px 6px;
+    border-radius: 999px;
+  }
+  
+  .ds-filter-bar-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--space-16);
+  }
+  
+  /* Make sure children (inputs, dropdowns) align nicely */
+  .ds-filter-bar-content > * {
+    min-width: 200px;
+    flex: 1;
+    margin-bottom: 0; /* Override ds-input-wrapper margin */
+  }

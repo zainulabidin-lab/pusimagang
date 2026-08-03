@@ -1,0 +1,192 @@
+/* ==========================================
+   TOGGLE COMPONENTS (Checkbox, Radio, Switch)
+   Premium SaaS Design Language
+   ========================================== */
+
+   .ds-toggle-wrapper {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: var(--space-8);
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+  }
+  
+  .ds-toggle-wrapper.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  .ds-toggle-label-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1px;
+  }
+  
+  .ds-toggle-label {
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-main);
+  }
+  
+  .ds-toggle-description {
+    font-size: var(--font-size-caption);
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  
+  /* HIDE NATIVE INPUTS */
+  .ds-checkbox-input,
+  .ds-radio-input,
+  .ds-switch-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* ---- CHECKBOX ---- */
+  .ds-checkbox-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+  
+  .ds-checkbox-custom {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .ds-checkbox-icon {
+    opacity: 0;
+    transform: scale(0.5);
+    color: white;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .ds-checkbox-input:checked ~ .ds-checkbox-custom {
+    background-color: var(--primary);
+    border-color: var(--primary);
+  }
+  
+  .ds-checkbox-input:checked ~ .ds-checkbox-custom .ds-checkbox-icon {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  .ds-checkbox-input:focus-visible ~ .ds-checkbox-custom {
+    box-shadow: 0 0 0 3px rgba(15, 82, 186, 0.2);
+    border-color: var(--primary);
+  }
+  
+  /* ---- RADIO ---- */
+  .ds-radio-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+  
+  .ds-radio-custom {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .ds-radio-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: white;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .ds-radio-input:checked ~ .ds-radio-custom {
+    background-color: var(--primary);
+    border-color: var(--primary);
+  }
+  
+  .ds-radio-input:checked ~ .ds-radio-custom .ds-radio-dot {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  .ds-radio-input:focus-visible ~ .ds-radio-custom {
+    box-shadow: 0 0 0 3px rgba(15, 82, 186, 0.2);
+    border-color: var(--primary);
+  }
+  
+  /* ---- SWITCH ---- */
+  .ds-switch-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 36px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+  
+  .ds-switch-custom {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: #CBD5E1;
+    border-radius: 999px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .ds-switch-thumb {
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 16px; height: 16px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+  
+  .ds-switch-input:checked ~ .ds-switch-custom {
+    background-color: var(--primary);
+  }
+  
+  .ds-switch-input:checked ~ .ds-switch-custom .ds-switch-thumb {
+    transform: translateX(16px);
+  }
+  
+  .ds-switch-input:focus-visible ~ .ds-switch-custom {
+    box-shadow: 0 0 0 3px rgba(15, 82, 186, 0.2);
+  }
+  
+  /* ---- ERROR STATE ---- */
+  .ds-toggle-wrapper.error .ds-checkbox-custom,
+  .ds-toggle-wrapper.error .ds-radio-custom {
+    border-color: var(--danger);
+  }
+  .ds-toggle-wrapper.error .ds-checkbox-input:focus-visible ~ .ds-checkbox-custom,
+  .ds-toggle-wrapper.error .ds-radio-input:focus-visible ~ .ds-radio-custom {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+  }

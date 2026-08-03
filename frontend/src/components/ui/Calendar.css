@@ -1,0 +1,109 @@
+/* ==========================================
+   CALENDAR COMPONENT
+   Premium SaaS Design Language
+   ========================================== */
+
+   .ds-calendar {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-16);
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    max-width: 320px;
+    font-family: inherit;
+  }
+  
+  .ds-calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-16);
+  }
+  
+  .ds-calendar-title {
+    margin: 0;
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-main);
+  }
+  
+  .ds-calendar-nav-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  
+  .ds-calendar-nav-btn:hover {
+    background-color: var(--surface-hover);
+    color: var(--text-main);
+  }
+  
+  .ds-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+  
+  .ds-calendar-weekdays {
+    margin-bottom: var(--space-8);
+  }
+  
+  .ds-calendar-weekday {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-medium);
+    color: var(--text-muted);
+  }
+  
+  .ds-calendar-day {
+    position: relative;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: var(--font-size-caption);
+    color: var(--text-main);
+    transition: all 0.2s;
+  }
+  
+  .ds-calendar-day.empty {
+    cursor: default;
+  }
+  
+  .ds-calendar-day:not(.empty):hover {
+    background-color: var(--surface-hover);
+  }
+  
+  .ds-calendar-day.today {
+    font-weight: var(--font-weight-bold);
+    color: var(--primary);
+  }
+  
+  .ds-calendar-day.selected {
+    background-color: var(--primary);
+    color: white;
+    font-weight: var(--font-weight-medium);
+  }
+  
+  .ds-calendar-day-dot {
+    position: absolute;
+    bottom: 4px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--primary);
+  }
+  
+  .ds-calendar-day.selected .ds-calendar-day-dot {
+    background-color: white;
+  }

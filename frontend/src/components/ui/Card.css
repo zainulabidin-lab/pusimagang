@@ -1,0 +1,95 @@
+/* ==========================================
+   CARD COMPONENT
+   Premium SaaS Design Language
+   ========================================== */
+
+   .ds-card {
+    background-color: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    color: var(--text-main);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .ds-card-hoverable:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-floating);
+    border-color: #CBD5E1;
+  }
+  
+  /* ---- VARIANTS ---- */
+  .ds-card-statistic {
+    text-align: center;
+    padding: var(--space-24);
+  }
+  .ds-card-statistic .ds-card-title {
+    font-size: var(--font-size-caption);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: var(--space-8);
+  }
+  .ds-card-statistic .ds-card-content {
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    padding: 0;
+  }
+  
+  .ds-card-action {
+    cursor: pointer;
+  }
+  .ds-card-action:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--primary);
+  }
+  
+  .ds-card-announcement {
+    background: linear-gradient(to right, rgba(15,82,186,0.02), rgba(15,82,186,0.08));
+    border-left: 4px solid var(--primary);
+  }
+  
+  /* ---- INNER ELEMENTS ---- */
+  .ds-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-24);
+  }
+  
+  .ds-card-title {
+    font-size: var(--font-size-title);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.2;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  
+  .ds-card-description {
+    font-size: var(--font-size-body);
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+  
+  .ds-card-content {
+    padding: 0 var(--space-24) var(--space-24);
+    flex-grow: 1;
+  }
+  
+  .ds-card-footer {
+    display: flex;
+    align-items: center;
+    padding: var(--space-16) var(--space-24);
+    border-top: 1px solid var(--border);
+    background-color: rgba(248, 250, 252, 0.5); /* slight tint */
+  }
+  
+  /* If header is omitted but content is first */
+  .ds-card-content:first-child {
+    padding-top: var(--space-24);
+  }

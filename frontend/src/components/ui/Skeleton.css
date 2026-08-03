@@ -1,0 +1,65 @@
+/* ==========================================
+   SKELETON COMPONENT
+   Premium SaaS Design Language
+   ========================================== */
+
+   .ds-skeleton {
+    display: block;
+    background-color: #E2E8F0;
+  }
+  
+  /* ---- VARIANTS ---- */
+  .ds-skeleton-text {
+    border-radius: var(--radius-sm);
+    height: 1.2em; /* roughly matches text height */
+    margin-top: 0;
+    margin-bottom: 0;
+    transform-origin: 0 50%;
+  }
+  .ds-skeleton-text:empty:before {
+    content: "\00a0";
+  }
+  
+  .ds-skeleton-circular {
+    border-radius: 50%;
+  }
+  
+  .ds-skeleton-rectangular {
+    border-radius: 0;
+  }
+  
+  /* ---- ANIMATIONS ---- */
+  .ds-skeleton-pulse {
+    animation: ds-skeleton-pulse 1.5s ease-in-out 0.5s infinite;
+  }
+  
+  @keyframes ds-skeleton-pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+  }
+  
+  .ds-skeleton-wave {
+    position: relative;
+    overflow: hidden;
+    background-color: #E2E8F0;
+  }
+  
+  .ds-skeleton-wave::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
+    transform: translateX(-100%);
+    animation: ds-skeleton-wave 1.6s linear 0.5s infinite;
+  }
+  
+  @keyframes ds-skeleton-wave {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }

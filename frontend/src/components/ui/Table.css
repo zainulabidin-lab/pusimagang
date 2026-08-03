@@ -1,0 +1,79 @@
+/* ==========================================
+   TABLE COMPONENT
+   Premium SaaS Design Language
+   ========================================== */
+
+   .ds-table-container {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: var(--radius-md);
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .ds-table {
+    width: 100%;
+    caption-side: bottom;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: var(--font-size-body);
+  }
+  
+  .ds-table-header {
+    background-color: rgba(248, 250, 252, 0.8);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(4px);
+  }
+  
+  .ds-table-body {
+    background-color: var(--surface);
+  }
+  
+  .ds-table-row {
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .ds-table-row:hover {
+    background-color: var(--surface-hover);
+  }
+  
+  /* Ensure last row doesn't have a double border if inside a container */
+  .ds-table-body .ds-table-row:last-child {
+    border-bottom: none;
+  }
+  
+  .ds-table-head {
+    height: 48px;
+    padding: 0 var(--space-16);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-muted);
+    white-space: nowrap;
+    user-select: none;
+    font-size: var(--font-size-caption);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .ds-table-cell {
+    padding: var(--space-16);
+    color: var(--text-main);
+    vertical-align: middle;
+  }
+  
+  .ds-table-footer {
+    background-color: rgba(248, 250, 252, 0.8);
+    border-top: 1px solid var(--border);
+    font-weight: var(--font-weight-semibold);
+  }
+  
+  .ds-table-caption {
+    padding: var(--space-16);
+    color: var(--text-muted);
+    font-size: var(--font-size-caption);
+    text-align: center;
+  }

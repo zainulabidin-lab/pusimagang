@@ -1,0 +1,242 @@
+/* ==========================================
+   PROGRESS COMPONENT
+   Premium SaaS Design Language
+   ========================================== */
+
+   /* ---- LINEAR PROGRESS ---- */
+   .ds-progress-linear {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    width: 100%;
+  }
+  
+  .ds-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-medium);
+  }
+  
+  .ds-progress-label {
+    color: var(--text-main);
+  }
+  
+  .ds-progress-value {
+    color: var(--text-muted);
+  }
+  
+  .ds-progress-track {
+    width: 100%;
+    background-color: var(--surface-hover);
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  
+  .ds-progress-bar {
+    height: 100%;
+    border-radius: 9999px;
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  /* Linear Sizes */
+  .ds-progress-sm .ds-progress-track { height: 4px; }
+  .ds-progress-md .ds-progress-track { height: 8px; }
+  .ds-progress-lg .ds-progress-track { height: 12px; }
+  
+  /* Linear Colors */
+  .ds-progress-color-primary { background-color: var(--primary); }
+  .ds-progress-color-success { background-color: var(--success); }
+  .ds-progress-color-warning { background-color: var(--warning); }
+  .ds-progress-color-danger { background-color: var(--danger); }
+  
+  /* Linear Indeterminate */
+  .ds-progress-indeterminate {
+    animation: ds-progress-indeterminate 1.5s infinite linear;
+    transform-origin: 0% 50%;
+  }
+  
+  @keyframes ds-progress-indeterminate {
+    0% { transform: translateX(0) scaleX(0); }
+    40% { transform: translateX(0) scaleX(0.4); }
+    100% { transform: translateX(100%) scaleX(0.5); }
+  }
+  
+  /* ---- CIRCULAR PROGRESS ---- */
+  .ds-progress-circular {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .ds-progress-circular svg {
+    transform: rotate(-90deg);
+  }
+  
+  .ds-progress-circular-track {
+    fill: none;
+    stroke: var(--surface-hover);
+  }
+  
+  .ds-progress-circular-bar {
+    fill: none;
+    stroke: currentColor;
+    transition: stroke-dashoffset 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .ds-progress-circular-value {
+    position: absolute;
+    font-size: 0.8em;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-main);
+  }
+  
+  .ds-progress-text-primary { color: var(--primary); }
+  .ds-progress-text-success { color: var(--success); }
+  .ds-progress-text-warning { color: var(--warning); }
+  .ds-progress-text-danger { color: var(--danger); }
+  
+  .ds-progress-circular-indeterminate svg {
+    animation: ds-progress-circular-rotate 2s linear infinite;
+  }
+  .ds-progress-circular-indeterminate .ds-progress-circular-bar {
+    animation: ds-progress-circular-dash 1.5s ease-in-out infinite;
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  
+  @keyframes ds-progress-circular-rotate {
+    100% { transform: rotate(270deg); }
+  }
+  @keyframes ds-progress-circular-dash {
+    0% { stroke-dasharray: 1, 200; stroke-dashoffset: 0; }
+    50% { stroke-dasharray: 89, 200; stroke-dashoffset: -35px; }
+    100% { stroke-dasharray: 89, 200; stroke-dashoffset: -124px; }
+  }
+  
+  /* ---- STEP PROGRESS ---- */
+  .ds-step-progress {
+    display: flex;
+    width: 100%;
+  }
+  
+  .ds-step-item {
+    display: flex;
+    flex: 1;
+  }
+  
+  .ds-step-indicator-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  
+  .ds-step-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-semibold);
+    z-index: 2;
+    transition: all 0.3s ease;
+  }
+  
+  .ds-step-line {
+    flex: 1;
+    background-color: var(--surface-hover);
+    transition: background-color 0.3s ease;
+  }
+  
+  .ds-step-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .ds-step-label {
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-medium);
+  }
+  
+  .ds-step-description {
+    font-size: var(--font-size-caption);
+    color: var(--text-muted);
+  }
+  
+  /* Horizontal */
+  .ds-step-horizontal {
+    flex-direction: row;
+  }
+  .ds-step-horizontal .ds-step-item {
+    flex-direction: column;
+    position: relative;
+  }
+  .ds-step-horizontal .ds-step-indicator-wrapper {
+    width: 100%;
+  }
+  .ds-step-horizontal .ds-step-line {
+    height: 2px;
+    position: absolute;
+    top: 11px;
+    left: 24px;
+    width: calc(100% - 24px);
+    z-index: 1;
+  }
+  .ds-step-horizontal .ds-step-content {
+    margin-top: var(--space-8);
+    padding-right: var(--space-16);
+  }
+  
+  /* Vertical */
+  .ds-step-vertical {
+    flex-direction: column;
+  }
+  .ds-step-vertical .ds-step-item {
+    flex-direction: row;
+    padding-bottom: var(--space-24);
+  }
+  .ds-step-vertical .ds-step-item:last-child {
+    padding-bottom: 0;
+  }
+  .ds-step-vertical .ds-step-indicator-wrapper {
+    flex-direction: column;
+    margin-right: var(--space-16);
+  }
+  .ds-step-vertical .ds-step-line {
+    width: 2px;
+    height: 100%;
+    min-height: 24px;
+    margin-top: 4px;
+  }
+  
+  /* Step States */
+  .ds-step-complete .ds-step-indicator {
+    background-color: var(--primary);
+    color: white;
+  }
+  .ds-step-complete .ds-step-line {
+    background-color: var(--primary);
+  }
+  .ds-step-complete .ds-step-label {
+    color: var(--text-main);
+  }
+  
+  .ds-step-current .ds-step-indicator {
+    background-color: white;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+  }
+  .ds-step-current .ds-step-label {
+    color: var(--primary);
+  }
+  
+  .ds-step-upcoming .ds-step-indicator {
+    background-color: var(--surface-hover);
+    color: var(--text-muted);
+  }
+  .ds-step-upcoming .ds-step-label {
+    color: var(--text-muted);
+  }

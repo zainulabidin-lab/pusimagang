@@ -1,0 +1,90 @@
+/* ==========================================
+   TOOLTIP COMPONENT
+   Premium SaaS Design Language
+   ========================================== */
+
+   .ds-tooltip-wrapper {
+    display: inline-block;
+    position: relative;
+  }
+  
+  .ds-tooltip-content {
+    position: absolute;
+    background-color: var(--text-main);
+    color: var(--surface);
+    padding: 6px 12px;
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-medium);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-dropdown);
+    white-space: nowrap;
+    z-index: var(--z-tooltip);
+    pointer-events: none;
+    opacity: 0;
+    animation: ds-tooltip-fade 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .ds-tooltip-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+  }
+  
+  /* Positions */
+  .ds-tooltip-top {
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .ds-tooltip-top .ds-tooltip-arrow {
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 4px 4px 0 4px;
+    border-color: var(--text-main) transparent transparent transparent;
+  }
+  
+  .ds-tooltip-bottom {
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .ds-tooltip-bottom .ds-tooltip-arrow {
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 4px 4px 4px;
+    border-color: transparent transparent var(--text-main) transparent;
+  }
+  
+  .ds-tooltip-left {
+    right: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .ds-tooltip-left .ds-tooltip-arrow {
+    right: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 4px 0 4px 4px;
+    border-color: transparent transparent transparent var(--text-main);
+  }
+  
+  .ds-tooltip-right {
+    left: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .ds-tooltip-right .ds-tooltip-arrow {
+    left: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 4px 4px 4px 0;
+    border-color: transparent var(--text-main) transparent transparent;
+  }
+  
+  @keyframes ds-tooltip-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
