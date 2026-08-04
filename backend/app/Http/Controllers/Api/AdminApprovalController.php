@@ -46,4 +46,20 @@ class AdminApprovalController extends Controller
 
         return response()->json(['message' => 'Akun berhasil disetujui.']);
     }
+
+    public function rejectIntern(Request $request, $id)
+    {
+        if ($request->user()->role === 'intern') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $user = User::findOrFail($id);
+        
+        if ($user->internProfile) {
+            $user->internProfile->delete();
+        }
+        $user->delete();
+
+        return response()->json(['message' => 'Akun berhasil ditolak dan dihapus.']);
+    }
 }

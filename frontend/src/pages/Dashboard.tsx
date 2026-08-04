@@ -78,6 +78,16 @@ const Dashboard: React.FC = () => {
         }
     };
 
+    const handleReject = async (internId: number) => {
+        if (!confirm('Tolak dan hapus pendaftaran akun ini? Data tidak bisa dikembalikan.')) return;
+        try {
+            await api.delete(`/admin/reject-intern/${internId}`);
+            fetchDashboard();
+        } catch (error) {
+            alert('Gagal menolak akun');
+        }
+    };
+
     const totalTasks = stats.active_tasks + stats.review_tasks + stats.completed_tasks + stats.late_tasks;
     const progressPercentage = totalTasks > 0 ? Math.round((stats.completed_tasks / totalTasks) * 100) : 0;
     
@@ -377,7 +387,8 @@ const Dashboard: React.FC = () => {
                                             <TableRow key={intern.id}>
                                                 <TableCell style={{ fontWeight: 600 }}>{intern.name}</TableCell>
                                                 <TableCell>{intern.email}</TableCell>
-                                                <TableCell style={{ textAlign: 'right' }}>
+                                                <TableCell style={{ textAlign: 'right', display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                                                    <Button variant="outline" size="sm" onClick={() => handleReject(intern.id)} style={{ color: 'var(--danger)', borderColor: 'var(--danger-light)' }}>Reject</Button>
                                                     <Button variant="primary" size="sm" onClick={() => handleApprove(intern.id)}>Approve</Button>
                                                 </TableCell>
                                             </TableRow>

@@ -24,6 +24,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Admin Approval
     Route::get('/admin/pending-interns', [\App\Http\Controllers\Api\AdminApprovalController::class, 'pendingInterns']);
     Route::patch('/admin/approve-intern/{id}', [\App\Http\Controllers\Api\AdminApprovalController::class, 'approveIntern']);
+    Route::delete('/admin/reject-intern/{id}', [\App\Http\Controllers\Api\AdminApprovalController::class, 'rejectIntern']);
 
     // Tasks & Checklists
     Route::get('/tasks', [\App\Http\Controllers\Api\TaskController::class, 'index']);
