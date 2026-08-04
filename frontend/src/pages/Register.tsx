@@ -134,7 +134,7 @@ const Register: React.FC = () => {
                                     <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-muted)', margin: 0 }}>Pastikan data yang Anda masukkan sudah benar.</p>
                                 </div>
                                 
-                                <div style={{ width: '100%', textAlign: 'left', marginTop: 'var(--space-12)', backgroundColor: 'var(--background)', padding: 'var(--space-12)', borderRadius: 'var(--radius-md)', fontSize: 'var(--font-size-sm)' }}>
+                                <div style={{ width: '100%', textAlign: 'left', marginTop: 'var(--space-12)', backgroundColor: 'var(--surface-hover)', padding: 'var(--space-12)', borderRadius: 'var(--radius-md)', fontSize: 'var(--font-size-sm)', border: '1px solid var(--border)' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
                                         <span style={{ color: 'var(--text-muted)' }}>Nama:</span>
                                         <span style={{ fontWeight: 500 }}>{name}</span>

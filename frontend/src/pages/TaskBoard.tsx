@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
-import { Plus, MoreVertical, Calendar, CheckSquare, Activity, Search, Filter } from 'lucide-react';
+import { Plus, MoreVertical, Calendar, CheckSquare, Activity, Search, Filter, Inbox } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { Drawer } from '../components/ui/Drawer';
@@ -29,6 +29,7 @@ const TaskBoard: React.FC = () => {
     const [newChecklist, setNewChecklist] = useState('');
     
     const [searchQuery, setSearchQuery] = useState('');
+    const [draggedOverCol, setDraggedOverCol] = useState<string | null>(null);
 
     const fetchData = async () => {
         try {
@@ -165,6 +166,7 @@ const TaskBoard: React.FC = () => {
         });
 
         await handleMoveTask(taskId, newStatus);
+        setDraggedOverCol(null);
     };
 
     const columns = [
@@ -235,9 +237,16 @@ const TaskBoard: React.FC = () => {
                         return (
                             <div 
                                 key={col.id} 
-                                onDragOver={(e) => e.preventDefault()}
+                                onDragOver={(e) => { e.preventDefault(); setDraggedOverCol(col.id); }}
+                                onDragLeave={() => setDraggedOverCol(null)}
                                 onDrop={(e) => handleDrop(e, col.id)}
-                                style={{ flex: '1', minWidth: '300px', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--surface-hover)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-12)', border: '1px solid var(--border)' }}
+                                style={{ 
+                                    flex: '1', minWidth: '300px', display: 'flex', flexDirection: 'column', 
+                                    backgroundColor: draggedOverCol === col.id ? 'var(--background)' : 'var(--surface-hover)', 
+                                    borderRadius: 'var(--radius-lg)', padding: 'var(--space-12)', 
+                                    border: draggedOverCol === col.id ? `2px dashed ${col.color}` : '1px solid var(--border)',
+                                    transition: 'all 0.2s'
+                                }}
                             >
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-12)' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-8)' }}>
@@ -249,8 +258,12 @@ const TaskBoard: React.FC = () => {
 
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-12)', flex: 1, overflowY: 'auto' }}>
                                     {colTasks.length === 0 ? (
-                                        <div style={{ padding: 'var(--space-24) 0', textAlign: 'center', color: 'var(--text-muted)' }}>
-                                            <p style={{ fontSize: 'var(--font-size-sm)' }}>No tasks here</p>
+                                        <div style={{ padding: 'var(--space-24) 0' }}>
+                                            <EmptyState 
+                                                icon={Inbox}
+                                                title="Empty"
+                                                description="No tasks here"
+                                            />
                                         </div>
                                     ) : colTasks.map((task: any) => (
                                         <div 

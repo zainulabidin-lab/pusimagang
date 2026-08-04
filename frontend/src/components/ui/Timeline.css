@@ -59,6 +59,11 @@
   .ds-timeline-content {
     flex: 1;
     padding-top: 4px; /* align with dot */
+    transition: transform 0.2s ease;
+  }
+
+  .ds-timeline-item:hover .ds-timeline-content {
+    transform: translateX(4px);
   }
   
   .ds-timeline-header {

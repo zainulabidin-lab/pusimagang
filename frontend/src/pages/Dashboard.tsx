@@ -4,7 +4,7 @@ import api from '../services/api';
 import { 
     Activity, Clock, CheckCircle, AlertTriangle, Plus, FileText, 
     TrendingUp, Calendar as CalendarIcon, Megaphone, 
-    ArrowUpRight, ArrowDownRight, Users, PlayCircle, BarChart2
+    ArrowUpRight, ArrowDownRight, Users, PlayCircle, BarChart2, Inbox
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
@@ -15,6 +15,7 @@ import { BarChart, DonutChart } from '../components/ui/Chart';
 import { LinearProgress } from '../components/ui/Progress';
 import { Timeline, TimelineItem } from '../components/ui/Timeline';
 import { Skeleton } from '../components/ui/Skeleton';
+import { EmptyState } from '../components/ui/EmptyState';
 
 // MOCK DATA FOR CHARTS & VISUALS (To avoid backend modifications)
 const mockActivityData = [
@@ -275,9 +276,11 @@ const Dashboard: React.FC = () => {
                     <CardContent>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-12)' }}>
                             {stats.weekly_deadlines.length === 0 ? (
-                                <div style={{ textAlign: 'center', padding: 'var(--space-32)', color: 'var(--text-muted)' }}>
-                                    No immediate deadlines. You're all caught up!
-                                </div>
+                                <EmptyState 
+                                    icon={CheckCircle}
+                                    title="All caught up!"
+                                    description="No immediate deadlines for this week."
+                                />
                             ) : (
                                 stats.weekly_deadlines.map(task => (
                                     <div key={task.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 'var(--space-16)', backgroundColor: 'var(--background)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
@@ -380,7 +383,13 @@ const Dashboard: React.FC = () => {
                                 <TableBody>
                                     {pendingInterns.length === 0 ? (
                                         <TableRow>
-                                            <TableCell colSpan={3} style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No pending approvals</TableCell>
+                                            <TableCell colSpan={3} style={{ padding: '0' }}>
+                                                <EmptyState 
+                                                    icon={Inbox}
+                                                    title="No Pending Approvals"
+                                                    description="There are no intern accounts waiting for approval."
+                                                />
+                                            </TableCell>
                                         </TableRow>
                                     ) : (
                                         pendingInterns.map(intern => (
