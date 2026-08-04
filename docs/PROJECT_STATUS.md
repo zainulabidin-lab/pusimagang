@@ -12,9 +12,9 @@
 | :--- | :--- |
 | **Project Name** | PUSIM Magang Enterprise v2.0 |
 | **Current Version** | 2.0.0-alpha (Refactoring Phase) |
-| **Current Sprint** | Sprint 1.4 (Assessment Domain Refactor) - *Completed* |
+| **Current Sprint** | Sprint 1.5 (CBT Domain Refactor) - *Completed* |
 | **Current Milestone** | Phase 1: Backend Architecture Enterprise Refactoring |
-| **Overall Completion** | ▓▓▓▓▓░░░░░ 50% |
+| **Overall Completion** | ▓▓▓▓▓▓░░░░ 60% |
 | **Current Branch** | `main` |
 
 ---
@@ -24,7 +24,7 @@
 | Category | Status | Progress | Short Summary |
 | :--- | :---: | :--- | :--- |
 | **Architecture** | 🟢 EXCELLENT | ▓▓▓▓▓▓▓▓▓░ 90% | Enterprise Blueprint & Standards established. |
-| **Backend (Laravel)** | 🟡 GOOD | ▓▓▓▓▓░░░░░ 50% | Core domains refactored. Rest pending. |
+| **Backend (Laravel)** | 🟡 GOOD | ▓▓▓▓▓▓░░░░ 60% | Core domains refactored. Rest pending. |
 | **Frontend (React)** | 🟡 GOOD | ▓▓▓▓▓▓▓▓░░ 80% | Feature complete. UI/UX optimized. |
 | **Database** | 🟢 EXCELLENT | ▓▓▓▓▓▓▓▓▓▓ 100% | Migrations and relations stable. |
 | **API Status** | 🟡 GOOD | ▓▓▓▓░░░░░░ 40% | Standardization to Resources in progress. |
@@ -45,9 +45,9 @@
 - **Sprint 1.2.5:** Engineering Standards Handbook
 - **Sprint 1.3:** Logbook Domain Enterprise Refactor
 - **Sprint 1.4:** Assessment Domain Enterprise Refactor
+- **Sprint 1.5:** CBT Domain Enterprise Refactor
 
 ### ⏳ Remaining Milestones
-- **Sprint 1.5:** CBT Domain
 - **Sprint 1.6:** Intern Profile Domain
 - **Sprint 1.7:** Mentor Profile Domain
 - **Sprint 1.8:** Dashboard Domain
@@ -68,7 +68,7 @@
 | **Task** | 🟢 CERTIFIED | 04 Aug 2026 | 92/100 | Minor (DTO) | Merged |
 | **Logbook** | 🟢 CERTIFIED | 04 Aug 2026 | 92/100 | Minor (Storage) | Merged |
 | **Assessment** | 🟢 CERTIFIED | 04 Aug 2026 | 95/100 | None | Merged |
-| **CBT** | 🔴 PENDING | - | 50/100 | High (Fat Controllers) | N/A |
+| **CBT** | 🟢 CERTIFIED | 04 Aug 2026 | 94/100 | None | Merged |
 | **Intern** | 🔴 PENDING | - | 50/100 | High (Fat Controllers) | N/A |
 | **Mentor** | 🔴 PENDING | - | 50/100 | High (Fat Controllers) | N/A |
 | **Dashboard** | 🔴 PENDING | - | 50/100 | High (Fat Controllers) | N/A |
@@ -153,7 +153,7 @@
 
 ## 10. NEXT ACTIONS
 
-- **DO NEXT:** Proceed to **Sprint 1.5 (CBT Domain Enterprise Refactor)**.
+- **DO NEXT:** Proceed to **Sprint 1.6 (Intern Profile Domain Enterprise Refactor)**.
 - **DO NOT START:** Do not start QA, UAT, or Deployment setup until all Backend Domains are fully refactored and certified.
 - **MANDATORY READING:** Any developer joining must first read `docs/ENGINEERING_STANDARD.md` and `docs/BACKEND_BLUEPRINT.md`.
 
@@ -164,5 +164,5 @@
 - **Project Health:** Stable and drastically improving.
 - **Current Risk Level:** Low. Refactoring strategy is proven to be safe and backward compatible.
 - **Release Confidence:** Moderate (will increase once testing begins).
-- **Recommended Next Sprint:** Sprint 1.5 (CBT Domain).
+- **Recommended Next Sprint:** Sprint 1.6 (Intern Profile Domain).
 - **Expected Stable Release Readiness:** On track for subsequent phase completion.
