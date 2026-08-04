@@ -13,29 +13,16 @@ const ReportExport: React.FC = () => {
     useEffect(() => {
         const fetchReport = async () => {
             try {
-                // Fetch user data, evaluations, logbooks, and tasks
-                // This requires a custom endpoint or multiple endpoints.
-                // For V1.2, we'll fetch from existing endpoints and filter.
+                // Fetch using the new Backend Report API
+                const response = await api.get(`/reports/intern/${id}`);
+                const reportData = response.data.data;
                 
-                // Assuming we use existing endpoints, we would fetch evaluations and logbooks,
-                // but we need them specifically for this intern_id.
-                // Ideally, a specific endpoint like `/reports/intern/{id}` is better.
-                // Since we don't have it, we will fetch evaluations and logbooks and filter locally (assuming admin/mentor).
-                
-                const [evalRes, logbookRes, tasksRes] = await Promise.all([
-                    api.get('/evaluations'),
-                    api.get('/logbook'), // Warning: logbook endpoint returns all if admin, or intern's if intern. We need admin rights to see all.
-                    api.get('/tasks')
-                ]);
-
-                const internEval = evalRes.data.data.find((e: any) => e.intern_id === Number(id));
-                const internLogbooks = logbookRes.data.data.filter((l: any) => l.intern_id === Number(id));
-                const internTasks = tasksRes.data.data.filter((t: any) => t.intern_id === Number(id) && t.status === 'done');
-
                 setData({
-                    evaluation: internEval,
-                    logbooks: internLogbooks,
-                    tasks: internTasks
+                    intern: reportData.intern,
+                    mentor: reportData.mentor,
+                    evaluation: reportData.evaluation,
+                    logbooks: reportData.logbooks,
+                    tasksSummary: reportData.tasks_summary
                 });
             } catch (error) {
                 console.error("Failed to fetch report", error);
@@ -100,22 +87,22 @@ const ReportExport: React.FC = () => {
                             <tr>
                                 <td style={{ width: '150px', fontWeight: 600 }}>Nama Siswa</td>
                                 <td style={{ width: '10px' }}>:</td>
-                                <td>{ev.intern?.name}</td>
+                                <td>{data.intern?.name}</td>
                             </tr>
                             <tr>
                                 <td style={{ fontWeight: 600 }}>Asal Instansi</td>
                                 <td>:</td>
-                                <td>{ev.intern?.intern_profile?.school?.name || '-'}</td>
+                                <td>{data.intern?.school_name || '-'}</td>
                             </tr>
                             <tr>
                                 <td style={{ fontWeight: 600 }}>Mentor Pembimbing</td>
                                 <td>:</td>
-                                <td>{ev.mentor?.name}</td>
+                                <td>{data.mentor?.name}</td>
                             </tr>
                             <tr>
                                 <td style={{ fontWeight: 600 }}>Tanggal Evaluasi</td>
                                 <td>:</td>
-                                <td>{new Date(ev.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</td>
+                                <td>{ev.evaluated_at ? new Date(ev.evaluated_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-'}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -140,22 +127,12 @@ const ReportExport: React.FC = () => {
                             </tr>
                             <tr>
                                 <td style={{ border: '1px solid #000', padding: '0.5rem', textAlign: 'center' }}>2</td>
-                                <td style={{ border: '1px solid #000', padding: '0.5rem' }}>Komunikasi & Kerjasama (Communication)</td>
-                                <td style={{ border: '1px solid #000', padding: '0.5rem', textAlign: 'center' }}>{ev.communication_score}</td>
-                            </tr>
-                            <tr>
-                                <td style={{ border: '1px solid #000', padding: '0.5rem', textAlign: 'center' }}>3</td>
-                                <td style={{ border: '1px solid #000', padding: '0.5rem' }}>Disiplin & Tanggung Jawab (Discipline)</td>
-                                <td style={{ border: '1px solid #000', padding: '0.5rem', textAlign: 'center' }}>{ev.discipline_score}</td>
-                            </tr>
-                            <tr>
-                                <td style={{ border: '1px solid #000', padding: '0.5rem', textAlign: 'center' }}>4</td>
-                                <td style={{ border: '1px solid #000', padding: '0.5rem' }}>Pemecahan Masalah (Problem Solving)</td>
-                                <td style={{ border: '1px solid #000', padding: '0.5rem', textAlign: 'center' }}>{ev.problem_solving_score}</td>
+                                <td style={{ border: '1px solid #000', padding: '0.5rem' }}>Aspek Non-Teknis (Non-Technical Skill)</td>
+                                <td style={{ border: '1px solid #000', padding: '0.5rem', textAlign: 'center' }}>{ev.non_technical_score}</td>
                             </tr>
                             <tr style={{ fontWeight: 700 }}>
                                 <td colSpan={2} style={{ border: '1px solid #000', padding: '0.5rem', textAlign: 'right' }}>RATA-RATA NILAI & PREDIKAT AKHIR</td>
-                                <td style={{ border: '1px solid #000', padding: '0.5rem', textAlign: 'center' }}>{ev.final_grade}</td>
+                                <td style={{ border: '1px solid #000', padding: '0.5rem', textAlign: 'center' }}>{ev.average_score} ({ev.status})</td>
                             </tr>
                         </tbody>
                     </table>
@@ -164,15 +141,15 @@ const ReportExport: React.FC = () => {
                 <div style={{ marginBottom: '2rem' }}>
                     <h3 style={{ fontSize: '1.125rem', fontWeight: 700, borderBottom: '1px solid #000', paddingBottom: '0.25rem', marginBottom: '0.5rem' }}>B. CATATAN MENTOR</h3>
                     <p style={{ fontSize: '1rem', lineHeight: 1.5, minHeight: '50px' }}>
-                        {ev.notes || '-'}
+                        {ev.mentor_notes || '-'}
                     </p>
                 </div>
 
                 {/* Ringkasan Portofolio */}
                 <div style={{ marginBottom: '2rem' }}>
                     <h3 style={{ fontSize: '1.125rem', fontWeight: 700, borderBottom: '1px solid #000', paddingBottom: '0.25rem', marginBottom: '1rem' }}>C. RINGKASAN PORTOFOLIO TUGAS</h3>
-                    <p style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Total Tugas Terselesaikan (Done): <b>{data.tasks.length} Tugas</b></p>
-                    <p style={{ fontSize: '1rem' }}>Total Kehadiran/Logbook Harian: <b>{data.logbooks.length} Hari</b></p>
+                    <p style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Total Tugas Terselesaikan (Done): <b>{data.tasksSummary.done} dari {data.tasksSummary.total} Tugas</b></p>
+                    <p style={{ fontSize: '1rem' }}>Total Kehadiran/Logbook Harian (Disetujui): <b>{data.logbooks.length} Hari</b></p>
                 </div>
 
                 {/* Detail Logbook Harian */}
@@ -223,8 +200,8 @@ const ReportExport: React.FC = () => {
                 {/* Tanda Tangan */}
                 <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '4rem' }}>
                     <div style={{ width: '250px', textAlign: 'center' }}>
-                        <p style={{ fontSize: '1rem', margin: '0 0 4rem 0' }}>Malang, {new Date(ev.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                        <p style={{ fontSize: '1rem', fontWeight: 700, textDecoration: 'underline', margin: '0 0 0.25rem 0' }}>{ev.mentor?.name}</p>
+                        <p style={{ fontSize: '1rem', margin: '0 0 4rem 0' }}>Malang, {ev.evaluated_at ? new Date(ev.evaluated_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-'}</p>
+                        <p style={{ fontSize: '1rem', fontWeight: 700, textDecoration: 'underline', margin: '0 0 0.25rem 0' }}>{data.mentor?.name}</p>
                         <p style={{ fontSize: '0.875rem', margin: 0 }}>Mentor Pembimbing Magang</p>
                     </div>
                 </div>

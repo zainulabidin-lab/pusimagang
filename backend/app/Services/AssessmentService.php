@@ -39,6 +39,10 @@ class AssessmentService implements BaseServiceInterface
      */
     public function storeEvaluation(User $mentor, array $data): Evaluation
     {
+        if (Evaluation::where('intern_id', $data['intern_id'])->exists()) {
+            throw new \App\Exceptions\BusinessException('Siswa ini sudah diberikan evaluasi akhir.', 400);
+        }
+
         return DB::transaction(function () use ($mentor, $data) {
             $data['mentor_id'] = $mentor->id;
             

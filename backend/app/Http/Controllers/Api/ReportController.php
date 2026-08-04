@@ -9,6 +9,7 @@ use App\Services\ReportService;
 use App\Http\Resources\ReportResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 class ReportController extends Controller
 {
@@ -24,7 +25,8 @@ class ReportController extends Controller
      */
     public function getInternReport(Request $request, int $id): JsonResponse
     {
-        // Add policy check later if needed, assume admin/mentor can access.
+        Gate::authorize('view-report', $id);
+
         $data = $this->reportService->generateInternReport($id);
 
         return response()->json([

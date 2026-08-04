@@ -49,6 +49,13 @@ const Dashboard: React.FC = () => {
     const [pendingInterns, setPendingInterns] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const [showModal, setShowModal] = useState(false);
+    const [selectedInternId, setSelectedInternId] = useState<number | null>(null);
+    const [mentors, setMentors] = useState<any[]>([]);
+    const [divisions, setDivisions] = useState<any[]>([]);
+    const [selectedMentor, setSelectedMentor] = useState('');
+    const [selectedDivision, setSelectedDivision] = useState('');
+
     const fetchDashboard = async () => {
         try {
             const response = await api.get('/dashboard');
@@ -69,10 +76,34 @@ const Dashboard: React.FC = () => {
         fetchDashboard();
     }, [user]);
 
-    const handleApprove = async (internId: number) => {
+    const openApproveModal = async (internId: number) => {
+        setSelectedInternId(internId);
+        try {
+            if (mentors.length === 0) {
+                const mRes = await api.get('/mentors');
+                setMentors(mRes.data.data);
+            }
+            if (divisions.length === 0) {
+                const dRes = await api.get('/master/divisions');
+                setDivisions(dRes.data.data);
+            }
+            setShowModal(true);
+        } catch (error) {
+            console.error("Failed to load mentor/division data", error);
+        }
+    };
+
+    const handleApprove = async () => {
+        if (!selectedMentor || !selectedDivision) return alert("Pilih Mentor dan Divisi!");
         if (!confirm('Setujui akun ini?')) return;
         try {
-            await api.patch(`/admin/approve-intern/${internId}`, { mentor_id: user?.id, division_id: 1 });
+            await api.patch(`/admin/approve-intern/${selectedInternId}`, { 
+                mentor_id: selectedMentor, 
+                division_id: selectedDivision 
+            });
+            setShowModal(false);
+            setSelectedMentor('');
+            setSelectedDivision('');
             fetchDashboard();
         } catch (error) {
             alert('Gagal menyetujui akun');
@@ -398,7 +429,7 @@ const Dashboard: React.FC = () => {
                                                 <TableCell>{intern.email}</TableCell>
                                                 <TableCell style={{ textAlign: 'right', display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
                                                     <Button variant="outline" size="sm" onClick={() => handleReject(intern.id)} style={{ color: 'var(--danger)', borderColor: 'var(--danger-light)' }}>Reject</Button>
-                                                    <Button variant="primary" size="sm" onClick={() => handleApprove(intern.id)}>Approve</Button>
+                                                    <Button variant="primary" size="sm" onClick={() => openApproveModal(intern.id)}>Approve</Button>
                                                 </TableCell>
                                             </TableRow>
                                         ))
@@ -444,6 +475,33 @@ const Dashboard: React.FC = () => {
                             </div>
                         </CardContent>
                     </Card>
+                </div>
+            )}
+
+            {/* Approval Modal */}
+            {showModal && (
+                <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ background: '#fff', padding: '24px', borderRadius: '8px', width: '400px' }}>
+                        <h3 style={{ marginTop: 0, color: '#000' }}>Assign Mentor & Division</h3>
+                        <div style={{ marginBottom: '12px' }}>
+                            <label style={{ display: 'block', marginBottom: '4px', fontSize: '14px', fontWeight: 600 }}>Mentor</label>
+                            <select style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }} value={selectedMentor} onChange={e => setSelectedMentor(e.target.value)}>
+                                <option value="">Pilih Mentor</option>
+                                {mentors.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
+                            </select>
+                        </div>
+                        <div style={{ marginBottom: '24px' }}>
+                            <label style={{ display: 'block', marginBottom: '4px', fontSize: '14px', fontWeight: 600 }}>Division</label>
+                            <select style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }} value={selectedDivision} onChange={e => setSelectedDivision(e.target.value)}>
+                                <option value="">Pilih Divisi</option>
+                                {divisions.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
+                            </select>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+                            <Button variant="outline" onClick={() => setShowModal(false)}>Batal</Button>
+                            <Button variant="primary" onClick={handleApprove}>Approve Intern</Button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
