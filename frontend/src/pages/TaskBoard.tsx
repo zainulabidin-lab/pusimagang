@@ -21,6 +21,7 @@ const TaskBoard: React.FC = () => {
     const [loading, setLoading] = useState(true);
 
     const [isCreateDrawerOpen, setIsCreateDrawerOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [newTask, setNewTask] = useState({ title: '', description: '', priority: 'medium', deadline: '', intern_ids: [] as number[], template_id: '', competency_id: '', difficulty: 'easy' });
 
     const [selectedTask, setSelectedTask] = useState<any>(null);
@@ -64,6 +65,7 @@ const TaskBoard: React.FC = () => {
 
     const handleCreateTask = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsSubmitting(true);
         try {
             let finalInternIds = newTask.intern_ids;
             if (user?.role === 'intern') {
@@ -85,6 +87,8 @@ const TaskBoard: React.FC = () => {
             fetchData();
         } catch (error: any) {
             alert('Gagal membuat task: ' + (error.response?.data?.message || 'Server error'));
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -411,8 +415,8 @@ const TaskBoard: React.FC = () => {
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--space-12)', paddingTop: 'var(--space-16)', borderTop: '1px solid var(--border)' }}>
-                        <Button type="button" variant="ghost" onClick={() => setIsCreateDrawerOpen(false)}>Cancel</Button>
-                        <Button type="submit" variant="primary">Create Task</Button>
+                        <Button type="button" variant="ghost" onClick={() => setIsCreateDrawerOpen(false)} disabled={isSubmitting}>Cancel</Button>
+                        <Button type="submit" variant="primary" disabled={isSubmitting}>{isSubmitting ? 'Creating...' : 'Create Task'}</Button>
                     </div>
                 </form>
             </Drawer>

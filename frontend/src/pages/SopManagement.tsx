@@ -14,6 +14,7 @@ const SopManagement: React.FC = () => {
     const [templates, setTemplates] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -80,6 +81,7 @@ const SopManagement: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsSubmitting(true);
         try {
             if (isEditing) {
                 await api.put(`/sop/${formData.id}`, formData);
@@ -90,6 +92,8 @@ const SopManagement: React.FC = () => {
             fetchData();
         } catch (error: any) {
             alert('Failed to save SOP: ' + (error.response?.data?.message || 'Server error'));
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -252,9 +256,9 @@ const SopManagement: React.FC = () => {
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', paddingTop: 'var(--space-16)', borderTop: '1px solid var(--border)', marginTop: 'auto' }}>
-                        <Button type="button" variant="ghost" onClick={() => setIsDrawerOpen(false)}>Cancel</Button>
-                        <Button type="submit" variant="primary" leftIcon={<Save size={16} />}>
-                            Save Template
+                        <Button type="button" variant="ghost" onClick={() => setIsDrawerOpen(false)} disabled={isSubmitting}>Cancel</Button>
+                        <Button type="submit" variant="primary" leftIcon={<Save size={16} />} disabled={isSubmitting}>
+                            {isSubmitting ? 'Saving...' : 'Save Template'}
                         </Button>
                     </div>
                 </form>

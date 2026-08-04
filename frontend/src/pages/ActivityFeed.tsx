@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
-import { Clock, Plus, Check, MessageCircle, FileText, AlertCircle } from 'lucide-react';
+import { Clock, Plus, Check, MessageCircle, FileText, AlertCircle, Activity } from 'lucide-react';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { EmptyState } from '../components/ui/EmptyState';
 
 const ActivityFeed: React.FC = () => {
     const [logs, setLogs] = useState<any[]>([]);
@@ -58,8 +59,12 @@ const ActivityFeed: React.FC = () => {
 
             <div className="card" style={{ padding: '2rem' }}>
                 {logs.length === 0 ? (
-                    <div style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '2rem' }}>
-                        Belum ada aktivitas tercatat.
+                    <div style={{ padding: 'var(--space-24) 0' }}>
+                        <EmptyState 
+                            icon={<Activity size={48} />}
+                            title="No Activity Yet"
+                            description="There is no recent activity recorded in the system."
+                        />
                     </div>
                 ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>

@@ -19,6 +19,7 @@ const Evaluation: React.FC = () => {
     const [loading, setLoading] = useState(true);
     
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     
     // Wizard State
     const [currentStep, setCurrentStep] = useState(1);
@@ -54,6 +55,7 @@ const Evaluation: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsSubmitting(true);
         try {
             await api.post('/evaluations', formData);
             setIsDrawerOpen(false);
@@ -64,6 +66,8 @@ const Evaluation: React.FC = () => {
             fetchData();
         } catch (error: any) {
             alert('Gagal menyimpan penilaian: ' + (error.response?.data?.message || 'Server error'));
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -285,8 +289,8 @@ const Evaluation: React.FC = () => {
                                 Continue
                             </Button>
                         ) : (
-                            <Button type="submit" variant="primary" style={{ backgroundColor: 'var(--success)' }}>
-                                Submit Evaluation
+                            <Button type="submit" variant="primary" style={{ backgroundColor: 'var(--success)' }} disabled={isSubmitting}>
+                                {isSubmitting ? 'Submitting...' : 'Submit Evaluation'}
                             </Button>
                         )}
                     </div>
