@@ -60,10 +60,12 @@ const MainLayout: React.FC = () => {
                     <main className="content-container">
                         <Outlet />
                     </main>
-                    <footer style={{ textAlign: 'center', padding: 'var(--space-24)', fontSize: 'var(--font-size-xs)', color: 'var(--text-muted)' }}>
-                        &copy; {new Date().getFullYear()} Pusat Teknologi dan Sistem Informasi (PUSIM). All rights reserved.
-                    </footer>
                 </div>
+                
+                {/* Fixed Footer */}
+                <footer style={{ textAlign: 'center', padding: '12px var(--space-24)', fontSize: 'var(--font-size-xs)', color: 'var(--text-muted)', borderTop: '1px solid var(--border)', backgroundColor: 'var(--surface)', flexShrink: 0 }}>
+                    &copy; {new Date().getFullYear()} Pusat Teknologi dan Sistem Informasi (PUSIM). All rights reserved.
+                </footer>
             </div>
 
             {/* Mobile Overlay */}
