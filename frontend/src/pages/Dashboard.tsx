@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
+import { ToastContainer, type ToastProps } from '../components/ui/Toast';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../components/ui/Table';
 import { BarChart, DonutChart } from '../components/ui/Chart';
 import { LinearProgress } from '../components/ui/Progress';
@@ -27,6 +28,7 @@ const mockAnnouncements = [
 
 const Dashboard: React.FC = () => {
     const { user } = useAuth();
+    const [toasts, setToasts] = useState<ToastProps[]>([]);
     const [stats, setStats] = useState({
         active_tasks: 0,
         review_tasks: 0,
@@ -39,6 +41,12 @@ const Dashboard: React.FC = () => {
         pending_logbooks: [] as any[],
         weekly_activity: [] as any[],
     });
+
+    const addToast = (title: string, message?: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') => {
+        const id = Math.random().toString(36).substring(2, 9);
+        setToasts(prev => [...prev, { id, title, message, type, onClose: (id) => setToasts(t => t.filter(toast => toast.id !== id)) }]);
+    };
+
     const [pendingInterns, setPendingInterns] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -125,9 +133,10 @@ const Dashboard: React.FC = () => {
         if (!confirm(`Are you sure you want to ${status} this logbook?`)) return;
         try {
             await api.patch(`/logbook/${logbookId}/approve`, { status, mentor_notes: null });
+            addToast('Berhasil', `Logbook berhasil di-${status}`, 'success');
             fetchDashboard();
         } catch (error) {
-            alert(`Failed to ${status} logbook`);
+            addToast('Gagal', `Gagal mengubah status logbook`, 'error');
         }
     };
 
@@ -569,6 +578,8 @@ const Dashboard: React.FC = () => {
                     </div>
                 </div>
             )}
+            
+            <ToastContainer toasts={toasts} />
         </div>
     );
 };
