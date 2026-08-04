@@ -277,7 +277,7 @@ const Dashboard: React.FC = () => {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-12)' }}>
                             {stats.weekly_deadlines.length === 0 ? (
                                 <EmptyState 
-                                    icon={CheckCircle}
+                                    icon={<CheckCircle size={48} />}
                                     title="All caught up!"
                                     description="No immediate deadlines for this week."
                                 />
@@ -385,7 +385,7 @@ const Dashboard: React.FC = () => {
                                         <TableRow>
                                             <TableCell colSpan={3} style={{ padding: '0' }}>
                                                 <EmptyState 
-                                                    icon={Inbox}
+                                                    icon={<Inbox size={48} />}
                                                     title="No Pending Approvals"
                                                     description="There are no intern accounts waiting for approval."
                                                 />

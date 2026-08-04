@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useDeferredValue, useMemo } from 'react';
 import api from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import { Plus, Smile, Meh, Frown, Clock, Calendar, Search } from 'lucide-react';
@@ -38,6 +38,7 @@ const Logbook: React.FC = () => {
     
     // Filtering
     const [searchQuery, setSearchQuery] = useState('');
+    const deferredSearchQuery = useDeferredValue(searchQuery);
     const [statusFilter, setStatusFilter] = useState('');
     
     // Approval state
@@ -184,11 +185,13 @@ const Logbook: React.FC = () => {
         }
     };
 
-    const filteredEntries = entries.filter(entry => {
-        const matchSearch = entry.activity.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchStatus = statusFilter ? entry.status === statusFilter : true;
-        return matchSearch && matchStatus;
-    });
+    const filteredEntries = useMemo(() => {
+        return entries.filter(entry => {
+            const matchSearch = entry.activity.toLowerCase().includes(deferredSearchQuery.toLowerCase());
+            const matchStatus = statusFilter ? entry.status === statusFilter : true;
+            return matchSearch && matchStatus;
+        });
+    }, [entries, deferredSearchQuery, statusFilter]);
 
     const activeFiltersCount = (searchQuery ? 1 : 0) + (statusFilter ? 1 : 0);
 

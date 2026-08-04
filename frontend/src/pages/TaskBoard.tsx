@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useDeferredValue, useMemo } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
 import { Plus, MoreVertical, Calendar, CheckSquare, Activity, Search, Filter, Inbox } from 'lucide-react';
@@ -29,6 +29,7 @@ const TaskBoard: React.FC = () => {
     const [newChecklist, setNewChecklist] = useState('');
     
     const [searchQuery, setSearchQuery] = useState('');
+    const deferredSearchQuery = useDeferredValue(searchQuery);
     const [draggedOverCol, setDraggedOverCol] = useState<string | null>(null);
 
     const fetchData = async () => {
@@ -176,10 +177,18 @@ const TaskBoard: React.FC = () => {
         { id: 'done', title: 'Done', color: '#10B981' }
     ];
 
-    const filterTasks = (taskList: any[]) => {
-        if (!searchQuery) return taskList;
-        return taskList.filter(t => t.title.toLowerCase().includes(searchQuery.toLowerCase()));
-    };
+    const filteredTasksByStatus = useMemo(() => {
+        const result: any = {};
+        for (const key of ['todo', 'progress', 'review', 'done']) {
+            const list = tasks[key] || [];
+            if (!deferredSearchQuery) {
+                result[key] = list;
+            } else {
+                result[key] = list.filter((t: any) => t.title.toLowerCase().includes(deferredSearchQuery.toLowerCase()));
+            }
+        }
+        return result;
+    }, [tasks, deferredSearchQuery]);
 
     const openTaskDetail = (task: any) => {
         setSelectedTask(task);
@@ -233,7 +242,7 @@ const TaskBoard: React.FC = () => {
             ) : (
                 <div style={{ display: 'flex', gap: 'var(--space-16)', flex: 1, overflowX: 'auto', paddingBottom: 'var(--space-8)' }}>
                     {columns.map(col => {
-                        const colTasks = filterTasks(tasks[col.id] || []);
+                        const colTasks = filteredTasksByStatus[col.id] || [];
                         return (
                             <div 
                                 key={col.id} 
@@ -260,7 +269,7 @@ const TaskBoard: React.FC = () => {
                                     {colTasks.length === 0 ? (
                                         <div style={{ padding: 'var(--space-24) 0' }}>
                                             <EmptyState 
-                                                icon={Inbox}
+                                                icon={<Inbox size={48} />}
                                                 title="Empty"
                                                 description="No tasks here"
                                             />
