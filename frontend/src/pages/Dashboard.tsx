@@ -17,16 +17,7 @@ import { Timeline, TimelineItem } from '../components/ui/Timeline';
 import { Skeleton } from '../components/ui/Skeleton';
 import { EmptyState } from '../components/ui/EmptyState';
 
-// MOCK DATA FOR CHARTS & VISUALS (To avoid backend modifications)
-const mockActivityData = [
-    { name: 'Mon', tasks: 12, logbooks: 8 },
-    { name: 'Tue', tasks: 19, logbooks: 15 },
-    { name: 'Wed', tasks: 15, logbooks: 12 },
-    { name: 'Thu', tasks: 22, logbooks: 18 },
-    { name: 'Fri', tasks: 28, logbooks: 24 },
-    { name: 'Sat', tasks: 5,  logbooks: 2 },
-    { name: 'Sun', tasks: 2,  logbooks: 1 },
-];
+// Removed mockActivityData as it is now provided by backend
 
 const mockAnnouncements = [
     { id: 1, title: 'System Maintenance Scheduled', date: '2026-08-10', type: 'warning' },
@@ -46,6 +37,7 @@ const Dashboard: React.FC = () => {
         interns_progress: [] as any[],
         leaderboard: [] as any[],
         pending_logbooks: [] as any[],
+        weekly_activity: [] as any[],
     });
     const [pendingInterns, setPendingInterns] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -298,7 +290,15 @@ const Dashboard: React.FC = () => {
                     </CardHeader>
                     <CardContent>
                         <BarChart 
-                            data={mockActivityData} 
+                            data={stats.weekly_activity && stats.weekly_activity.length > 0 ? stats.weekly_activity : [
+                                { name: 'Mon', tasks: 0, logbooks: 0 },
+                                { name: 'Tue', tasks: 0, logbooks: 0 },
+                                { name: 'Wed', tasks: 0, logbooks: 0 },
+                                { name: 'Thu', tasks: 0, logbooks: 0 },
+                                { name: 'Fri', tasks: 0, logbooks: 0 },
+                                { name: 'Sat', tasks: 0, logbooks: 0 },
+                                { name: 'Sun', tasks: 0, logbooks: 0 },
+                            ]} 
                             height={280} 
                             bars={[
                                 { dataKey: 'tasks', name: 'Tasks Completed', color: 'var(--primary)' },

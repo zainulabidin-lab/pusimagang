@@ -24,6 +24,7 @@ class DashboardResource extends JsonResource
             'interns_progress' => $this->resource['interns_progress'] ?? [],
             'leaderboard' => $this->resource['leaderboard'] ?? [],
             'pending_logbooks' => $this->resource['pending_logbooks'] ?? [],
+            'weekly_activity' => $this->resource['weekly_activity'] ?? [],
         ];
     }
 }

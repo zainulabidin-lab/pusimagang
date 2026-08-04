@@ -118,6 +118,29 @@ class DashboardService implements BaseServiceInterface
                 });
         }
 
+        // Weekly Activity Volume (last 7 days)
+        $weeklyActivity = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $dateString = $date->format('Y-m-d');
+            $dayName = $date->format('D'); // Mon, Tue, etc.
+
+            $tasksDone = (clone $taskQuery)
+                ->where('status', 'done')
+                ->whereDate('updated_at', $dateString)
+                ->count();
+                
+            $logbooksFilled = (clone $logbookQuery)
+                ->whereDate('date', $dateString)
+                ->count();
+
+            $weeklyActivity[] = [
+                'name' => $dayName,
+                'tasks' => $tasksDone,
+                'logbooks' => $logbooksFilled,
+            ];
+        }
+
         return [
             'active_tasks' => $activeCount,
             'review_tasks' => $reviewCount,
@@ -128,6 +151,7 @@ class DashboardService implements BaseServiceInterface
             'interns_progress' => $internsProgress,
             'leaderboard' => $leaderboard,
             'pending_logbooks' => $pendingLogbooksList,
+            'weekly_activity' => $weeklyActivity,
         ];
     }
 }
