@@ -55,12 +55,20 @@ const Dashboard: React.FC = () => {
     const [divisions, setDivisions] = useState<any[]>([]);
     const [selectedMentor, setSelectedMentor] = useState('');
     const [selectedDivision, setSelectedDivision] = useState('');
+    const [activities, setActivities] = useState<any[]>([]);
 
     const fetchDashboard = async () => {
         try {
             const response = await api.get('/dashboard');
             setStats(response.data.data);
             
+            try {
+                const notifRes = await api.get('/notifications');
+                setActivities(notifRes.data.data);
+            } catch (e) {
+                console.error("Failed to fetch activities", e);
+            }
+
             if (user?.role !== 'intern') {
                 const resPending = await api.get('/admin/pending-interns');
                 setPendingInterns(resPending.data.data);
@@ -127,13 +135,28 @@ const Dashboard: React.FC = () => {
     const hour = new Date().getHours();
     const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
     
-    // Mock Distribution Data
     const distributionData = [
         { name: 'Active', value: stats.active_tasks || 1 },
         { name: 'Review', value: stats.review_tasks || 1 },
         { name: 'Done', value: stats.completed_tasks || 1 },
         { name: 'Late', value: stats.late_tasks || 0 },
     ];
+
+    const timelineItems = activities.slice(0, 5).map(notif => {
+        let statusStr = 'primary';
+        if (notif.type?.includes('approve') || notif.type?.includes('success')) statusStr = 'success';
+        else if (notif.type?.includes('reject') || notif.type?.includes('fail')) statusStr = 'danger';
+        else if (notif.type?.includes('task') || notif.type?.includes('warning')) statusStr = 'warning';
+
+        const timeStr = new Date(notif.created_at).toLocaleDateString('id-ID') + ' ' + new Date(notif.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+        return {
+            title: notif.title,
+            description: notif.message,
+            time: timeStr,
+            status: statusStr
+        };
+    });
 
     if (loading) {
         return (
@@ -343,32 +366,15 @@ const Dashboard: React.FC = () => {
                         <CardTitle style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-8)' }}><Activity size={18}/> Recent Activity</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <Timeline items={[
-                            {
-                                title: "Logbook Approved",
-                                description: "Supervisor approved logbook Week 4",
-                                time: "2 hours ago",
-                                status: "success"
-                            },
-                            {
-                                title: "Task Submitted",
-                                description: "Frontend component task submitted for review",
-                                time: "5 hours ago",
-                                status: "warning"
-                            },
-                            {
-                                title: "New Announcement",
-                                description: "System maintenance scheduled",
-                                time: "Yesterday",
-                                status: "primary"
-                            },
-                            {
-                                title: "Internship Approved",
-                                description: "Your internship application was approved",
-                                time: "3 days ago",
-                                status: "success"
-                            }
-                        ]} />
+                        {timelineItems.length > 0 ? (
+                            <Timeline items={timelineItems} />
+                        ) : (
+                            <EmptyState 
+                                icon={<Activity size={48} />}
+                                title="No Recent Activity"
+                                description="You have no notifications yet."
+                            />
+                        )}
                     </CardContent>
                 </Card>
 
