@@ -100,6 +100,24 @@ class DashboardService implements BaseServiceInterface
             ->take(5)
             ->values();
 
+        // Pending Logbooks for Approval
+        $pendingLogbooksList = [];
+        if ($user->role !== 'intern') {
+            $pendingLogbooksList = (clone $logbookQuery)
+                ->with('intern')
+                ->where('status', 'pending')
+                ->orderBy('date', 'desc')
+                ->get()
+                ->map(function ($logbook) {
+                    return [
+                        'id' => $logbook->id,
+                        'intern_name' => $logbook->intern ? $logbook->intern->name : 'Unknown',
+                        'date' => $logbook->date->format('Y-m-d'),
+                        'activity' => $logbook->activity,
+                    ];
+                });
+        }
+
         return [
             'active_tasks' => $activeCount,
             'review_tasks' => $reviewCount,
@@ -109,6 +127,7 @@ class DashboardService implements BaseServiceInterface
             'weekly_deadlines' => $weeklyDeadlines,
             'interns_progress' => $internsProgress,
             'leaderboard' => $leaderboard,
+            'pending_logbooks' => $pendingLogbooksList,
         ];
     }
 }

@@ -45,6 +45,7 @@ const Dashboard: React.FC = () => {
         weekly_deadlines: [] as any[],
         interns_progress: [] as any[],
         leaderboard: [] as any[],
+        pending_logbooks: [] as any[],
     });
     const [pendingInterns, setPendingInterns] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -125,6 +126,16 @@ const Dashboard: React.FC = () => {
             fetchDashboard();
         } catch (error) {
             alert('Gagal menolak akun');
+        }
+    };
+
+    const handleLogbookAction = async (logbookId: number, status: 'approved' | 'rejected') => {
+        if (!confirm(`Are you sure you want to ${status} this logbook?`)) return;
+        try {
+            await api.patch(`/logbook/${logbookId}/approve`, { status, mentor_notes: null });
+            fetchDashboard();
+        } catch (error) {
+            alert(`Failed to ${status} logbook`);
         }
     };
 
@@ -379,6 +390,54 @@ const Dashboard: React.FC = () => {
                 </Card>
 
             </div>
+
+            {/* PENDING LOGBOOKS */}
+            {user?.role !== 'intern' && (
+                <div className="bento-grid">
+                    <Card className="bento-item col-span-12">
+                        <CardHeader>
+                            <CardTitle style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-8)' }}><FileText size={18}/> Logbook Needs Review</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Student Name</TableHead>
+                                        <TableHead>Date</TableHead>
+                                        <TableHead>Activity</TableHead>
+                                        <TableHead style={{ textAlign: 'right' }}>Action</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {!stats.pending_logbooks || stats.pending_logbooks.length === 0 ? (
+                                        <TableRow>
+                                            <TableCell colSpan={4} style={{ padding: '0' }}>
+                                                <EmptyState 
+                                                    icon={<CheckCircle size={48} />}
+                                                    title="All Caught Up"
+                                                    description="No logbooks are currently waiting for your review."
+                                                />
+                                            </TableCell>
+                                        </TableRow>
+                                    ) : (
+                                        stats.pending_logbooks.map((logbook: any) => (
+                                            <TableRow key={logbook.id}>
+                                                <TableCell style={{ fontWeight: 600 }}>{logbook.intern_name}</TableCell>
+                                                <TableCell>{logbook.date}</TableCell>
+                                                <TableCell>{logbook.activity.length > 50 ? logbook.activity.substring(0, 50) + '...' : logbook.activity}</TableCell>
+                                                <TableCell style={{ textAlign: 'right', display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                                                    <Button variant="outline" size="sm" onClick={() => handleLogbookAction(logbook.id, 'rejected')} style={{ color: 'var(--danger)', borderColor: 'var(--danger-light)' }}>Reject</Button>
+                                                    <Button variant="primary" size="sm" onClick={() => handleLogbookAction(logbook.id, 'approved')}>Approve</Button>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </CardContent>
+                    </Card>
+                </div>
+            )}
 
             {/* ANNOUNCEMENTS (Full Width Bottom) */}
             <div className="bento-grid">
