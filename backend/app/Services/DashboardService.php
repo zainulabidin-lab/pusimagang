@@ -31,7 +31,11 @@ class DashboardService implements BaseServiceInterface
         $lateQuery = clone $taskQuery;
         
         $activeCount = (clone $taskQuery)->whereIn('status', ['todo', 'progress'])->count();
-        $reviewCount = (clone $taskQuery)->where('status', 'review')->count();
+        
+        $taskReviewCount = (clone $taskQuery)->where('status', 'review')->count();
+        $logbookReviewCount = (clone $logbookQuery)->where('status', 'pending')->count();
+        $reviewCount = $taskReviewCount + $logbookReviewCount;
+
         $completedCount = (clone $taskQuery)->where('status', 'done')->count();
         $totalLogbooks = $logbookQuery->count();
 
