@@ -1,6 +1,6 @@
 # 🚀 PUSIM Magang Enterprise v2.0
 
-Sistem Manajemen Magang berskala Enterprise, didesain khusus untuk Pusat Sistem Informasi Manajemen (PUSIM). PUSIM Magang mengintegrasikan pengelolaan harian *interns*, evaluasi *mentors*, dan pelacakan kinerja terpusat dengan UI/UX premium kelas satu.
+Sistem Manajemen Magang berskala Enterprise, didesain khusus untuk Pusat Teknologi dan Sistem Informasi (PUSIM). PUSIM Magang mengintegrasikan pengelolaan harian *interns*, evaluasi *mentors*, dan pelacakan kinerja terpusat dengan UI/UX premium kelas satu.
 
 ## 🌟 Fitur Utama
 - **Role-Based Access Control (RBAC)** (Admin, Mentor, Intern)
@@ -26,4 +26,4 @@ Sistem ini telah dilengkapi dengan pedoman dokumentasi arsitektur dan penyebaran
 Aplikasi ini diarsiteki dengan prinsip SOLID, DRY, dan pemisahan komponen *React* yang terstruktur. Jika Anda ingin melakukan improvisasi, pastikan mempertahankan standar UI *Enterprise* (tanpa memodifikasi `index.css` tanpa persetujuan tim *Design System*).
 
 ---
-© 2026 PUSIM (Pusat Sistem Informasi Manajemen) - All Rights Reserved.
+© 2026 PUSIM (Pusat Teknologi dan Sistem Informasi) - All Rights Reserved.

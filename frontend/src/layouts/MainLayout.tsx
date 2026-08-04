@@ -61,7 +61,7 @@ const MainLayout: React.FC = () => {
                         <Outlet />
                     </main>
                     <footer style={{ textAlign: 'center', padding: 'var(--space-24)', fontSize: 'var(--font-size-xs)', color: 'var(--text-muted)' }}>
-                        &copy; {new Date().getFullYear()} Pusat Sistem Informasi Manajemen (PUSIM). All rights reserved.
+                        &copy; {new Date().getFullYear()} Pusat Teknologi dan Sistem Informasi (PUSIM). All rights reserved.
                     </footer>
                 </div>
             </div>
