@@ -24,9 +24,9 @@ Review Cycle: Changes require Architecture Review Board approval
 | :--- | :--- |
 | **Project Name** | PUSIM Magang Enterprise v2.0 |
 | **Current Version** | 2.0.0-alpha (Refactoring Phase) |
-| **Current Sprint** | Sprint 1.5 (CBT Domain Refactor) - *Completed* |
+| **Current Sprint** | Sprint 1.6 (Intern Profile Domain Refactor) - *Completed* |
 | **Current Milestone** | Phase 1: Backend Architecture Enterprise Refactoring |
-| **Overall Completion** | ▓▓▓▓▓▓░░░░ 60% |
+| **Overall Completion** | ▓▓▓▓▓▓▓░░░ 70% |
 | **Current Branch** | `main` |
 
 ---
@@ -36,7 +36,7 @@ Review Cycle: Changes require Architecture Review Board approval
 | Category | Status | Progress | Short Summary |
 | :--- | :---: | :--- | :--- |
 | **Architecture** | 🟢 EXCELLENT | ▓▓▓▓▓▓▓▓▓░ 90% | Enterprise Blueprint & Standards established. |
-| **Backend (Laravel)** | 🟡 GOOD | ▓▓▓▓▓▓░░░░ 60% | Core domains refactored. Rest pending. |
+| **Backend (Laravel)** | 🟢 EXCELLENT | ▓▓▓▓▓▓▓░░░ 70% | Core domains refactored. Minor domains pending. |
 | **Frontend (React)** | 🟡 GOOD | ▓▓▓▓▓▓▓▓░░ 80% | Feature complete. UI/UX optimized. |
 | **Database** | 🟢 EXCELLENT | ▓▓▓▓▓▓▓▓▓▓ 100% | Migrations and relations stable. |
 | **API Status** | 🟡 GOOD | ▓▓▓▓░░░░░░ 40% | Standardization to Resources in progress. |
@@ -58,9 +58,9 @@ Review Cycle: Changes require Architecture Review Board approval
 - **Sprint 1.3:** Logbook Domain Enterprise Refactor
 - **Sprint 1.4:** Assessment Domain Enterprise Refactor
 - **Sprint 1.5:** CBT Domain Enterprise Refactor
+- **Sprint 1.6:** Intern Profile Domain Enterprise Refactor
 
 ### ⏳ Remaining Milestones
-- **Sprint 1.6:** Intern Profile Domain
 - **Sprint 1.7:** Mentor Profile Domain
 - **Sprint 1.8:** Dashboard Domain
 - **Sprint 1.9:** Reports & Notifications Domain
@@ -81,7 +81,7 @@ Review Cycle: Changes require Architecture Review Board approval
 | **Logbook** | 🟢 CERTIFIED | 04 Aug 2026 | 92/100 | Minor (Storage) | Merged |
 | **Assessment** | 🟢 CERTIFIED | 04 Aug 2026 | 95/100 | None | Merged |
 | **CBT** | 🟢 CERTIFIED | 04 Aug 2026 | 94/100 | None | Merged |
-| **Intern** | 🔴 PENDING | - | 50/100 | High (Fat Controllers) | N/A |
+| **Intern** | 🟢 CERTIFIED | 04 Aug 2026 | 96/100 | Controller Renaming Deferred | Merged |
 | **Mentor** | 🔴 PENDING | - | 50/100 | High (Fat Controllers) | N/A |
 | **Dashboard** | 🔴 PENDING | - | 50/100 | High (Fat Controllers) | N/A |
 | **Reports** | 🔴 PENDING | - | 50/100 | High (Fat Controllers) | N/A |
@@ -165,7 +165,7 @@ Review Cycle: Changes require Architecture Review Board approval
 
 ## 10. NEXT ACTIONS
 
-- **DO NEXT:** Proceed to **Sprint 1.6 (Intern Profile Domain Enterprise Refactor)**.
+- **DO NEXT:** Proceed to **Sprint 1.7 (Mentor Profile Domain Enterprise Refactor)**.
 - **DO NOT START:** Do not start QA, UAT, or Deployment setup until all Backend Domains are fully refactored and certified.
 - **MANDATORY READING:** Any developer joining must first read `docs/ENGINEERING_STANDARD.md` and `docs/BACKEND_BLUEPRINT.md`.
 
@@ -176,5 +176,5 @@ Review Cycle: Changes require Architecture Review Board approval
 - **Project Health:** Stable and drastically improving.
 - **Current Risk Level:** Low. Refactoring strategy is proven to be safe and backward compatible.
 - **Release Confidence:** Moderate (will increase once testing begins).
-- **Recommended Next Sprint:** Sprint 1.6 (Intern Profile Domain).
+- **Recommended Next Sprint:** Sprint 1.7 (Mentor Profile Domain).
 - **Expected Stable Release Readiness:** On track for subsequent phase completion.

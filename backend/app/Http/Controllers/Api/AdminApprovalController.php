@@ -1,65 +1,68 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Services\InternService;
+use App\Http\Requests\Intern\ApproveInternRequest;
+use App\Http\Resources\InternResource;
+use Illuminate\Http\JsonResponse;
 
 class AdminApprovalController extends Controller
 {
-    public function pendingInterns(Request $request)
+    protected InternService $internService;
+
+    public function __construct(InternService $internService)
     {
-        if ($request->user()->role === 'intern') {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
-        $interns = User::where('role', 'intern')
-            ->where('is_approved', false)
-            ->with(['internProfile'])
-            ->get();
-
-        return response()->json(['data' => $interns]);
+        $this->internService = $internService;
     }
 
-    public function approveIntern(Request $request, $id)
+    /**
+     * Get all pending interns.
+     */
+    public function pendingInterns(): JsonResponse
     {
-        if ($request->user()->role === 'intern') {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+        $this->authorize('manage', User::class);
 
-        $user = User::findOrFail($id);
-        
-        $request->validate([
-            'mentor_id' => 'required|exists:users,id',
-            'division_id' => 'required|exists:divisions,id',
+        $interns = $this->internService->getPendingInterns();
+
+        return response()->json([
+            'data' => InternResource::collection($interns)
         ]);
-
-        $user->is_approved = true;
-        $user->save();
-
-        if ($user->internProfile) {
-            $user->internProfile->mentor_id = $request->mentor_id;
-            $user->internProfile->division_id = $request->division_id;
-            $user->internProfile->save();
-        }
-
-        return response()->json(['message' => 'Akun berhasil disetujui.']);
     }
 
-    public function rejectIntern(Request $request, $id)
+    /**
+     * Approve an intern.
+     */
+    public function approveIntern(ApproveInternRequest $request, int $id): JsonResponse
     {
-        if ($request->user()->role === 'intern') {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+        $this->authorize('manage', User::class);
 
         $user = User::findOrFail($id);
         
-        if ($user->internProfile) {
-            $user->internProfile->delete();
-        }
-        $user->delete();
+        $this->internService->approveIntern($user, $request->validated());
 
-        return response()->json(['message' => 'Akun berhasil ditolak dan dihapus.']);
+        return response()->json([
+            'message' => 'Akun berhasil disetujui.'
+        ]);
+    }
+
+    /**
+     * Reject an intern.
+     */
+    public function rejectIntern(int $id): JsonResponse
+    {
+        $this->authorize('manage', User::class);
+
+        $user = User::findOrFail($id);
+        
+        $this->internService->rejectIntern($user);
+
+        return response()->json([
+            'message' => 'Akun berhasil ditolak dan dihapus.'
+        ]);
     }
 }
