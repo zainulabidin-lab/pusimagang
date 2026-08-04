@@ -1,59 +1,71 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Task;
 use App\Models\TaskChecklist;
+use App\Services\TaskService;
+use App\Http\Requests\Task\StoreTaskChecklistRequest;
+use App\Http\Resources\TaskChecklistResource;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class TaskChecklistController extends Controller
 {
-    public function store(Request $request, $taskId)
+    /**
+     * @var TaskService
+     */
+    protected TaskService $taskService;
+
+    /**
+     * TaskChecklistController constructor.
+     *
+     * @param TaskService $taskService
+     */
+    public function __construct(TaskService $taskService)
     {
-        $validated = $request->validate([
-            'description' => 'required|string',
-        ]);
-
-        $checklist = TaskChecklist::create([
-            'task_id' => $taskId,
-            'description' => $validated['description'],
-            'is_completed' => false,
-            'order' => TaskChecklist::where('task_id', $taskId)->max('order') + 1,
-        ]);
-
-        return response()->json(['data' => $checklist]);
+        $this->taskService = $taskService;
     }
 
-    public function toggle($taskId, $id)
+    /**
+     * Store a newly created checklist item.
+     *
+     * @param StoreTaskChecklistRequest $request
+     * @param int|string $taskId
+     * @return JsonResponse
+     */
+    public function store(StoreTaskChecklistRequest $request, $taskId): JsonResponse
     {
-        $user = request()->user();
-        $task = \App\Models\Task::where('id', $taskId)->where(function ($query) use ($user) {
-            if ($user->role === 'intern') {
-                $query->where('intern_id', $user->id)
-                      ->orWhereHas('interns', function ($q) use ($user) {
-                          $q->where('users.id', $user->id);
-                      });
-            } elseif ($user->role === 'mentor') {
-                $query->where('mentor_id', $user->id);
-            }
-        })->first();
+        $task = Task::findOrFail($taskId);
+        
+        $this->authorize('update', $task);
 
-        if (!$task) {
-            return response()->json(['message' => 'Task tidak ditemukan atau Anda tidak memiliki akses.'], 404);
-        }
+        $checklist = $this->taskService->storeChecklist($task, $request->validated('description'));
+
+        return $this->sendSuccess(new TaskChecklistResource($checklist), 'Checklist added', 201);
+    }
+
+    /**
+     * Toggle the specified checklist completion status.
+     *
+     * @param Request $request
+     * @param int|string $taskId
+     * @param int|string $id
+     * @return JsonResponse
+     */
+    public function toggle(Request $request, $taskId, $id): JsonResponse
+    {
+        $task = Task::findOrFail($taskId);
+        
+        $this->authorize('update', $task);
 
         $checklist = TaskChecklist::where('task_id', $taskId)->findOrFail($id);
-        $checklist->is_completed = !$checklist->is_completed;
-        $checklist->save();
+        
+        $updatedChecklist = $this->taskService->toggleChecklist($checklist, $request->user());
 
-        // Catat ke Timeline
-        \App\Models\TaskLog::create([
-            'task_id' => $taskId,
-            'user_id' => request()->user()->id,
-            'action' => 'checklist_checked',
-            'details' => 'Menandai checklist: ' . $checklist->description,
-        ]);
-
-        return response()->json(['data' => $checklist]);
+        return $this->sendSuccess(new TaskChecklistResource($updatedChecklist));
     }
 }
