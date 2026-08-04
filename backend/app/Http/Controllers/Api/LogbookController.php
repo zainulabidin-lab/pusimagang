@@ -73,8 +73,19 @@ class LogbookController extends Controller
 
         $logbook = DailyLogbook::findOrFail($id);
         
-        // Ensure only mentor can approve
-        if ($request->user()->role !== 'mentor' && $request->user()->role !== 'admin') {
+        // Ensure only mentor can approve and mentor is the intern's mentor
+        $user = $request->user();
+        if ($user->role === 'admin') {
+            // Admin can approve anything
+        } elseif ($user->role === 'mentor') {
+            // Mentor can only approve if they mentor the intern
+            $isMentoring = \App\Models\InternProfile::where('user_id', $logbook->intern_id)
+                ->where('mentor_id', $user->id)
+                ->exists();
+            if (!$isMentoring) {
+                return response()->json(['message' => 'Unauthorized. Anda bukan mentor untuk intern ini.'], 403);
+            }
+        } else {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 

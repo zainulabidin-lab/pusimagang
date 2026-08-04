@@ -5,8 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\TaskController;
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/register', [\App\Http\Controllers\Api\RegisterController::class, 'register']);
+Route::middleware('throttle:5,1')->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [\App\Http\Controllers\Api\RegisterController::class, 'register']);
+});
 
 // Master data required for public registration
 Route::get('/master/schools', [\App\Http\Controllers\Api\MasterDataController::class, 'schools']);

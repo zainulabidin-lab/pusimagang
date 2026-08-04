@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
-#[Fillable(['title', 'description', 'location', 'category', 'division_id', 'priority', 'deadline', 'mentor_id', 'intern_id', 'status'])]
+#[Fillable(['title', 'description', 'location', 'category', 'division_id', 'priority', 'deadline', 'mentor_id', 'intern_id', 'status', 'competency_id', 'difficulty'])]
 class Task extends Model
 {
     use HasFactory, SoftDeletes;

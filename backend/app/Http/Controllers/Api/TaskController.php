@@ -89,7 +89,22 @@ class TaskController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
-        $task = Task::findOrFail($id);
+        $user = $request->user();
+        
+        $task = Task::where('id', $id)->where(function ($query) use ($user) {
+            if ($user->role === 'intern') {
+                $query->where('intern_id', $user->id)
+                      ->orWhereHas('interns', function ($q) use ($user) {
+                          $q->where('users.id', $user->id);
+                      });
+            } elseif ($user->role === 'mentor') {
+                $query->where('mentor_id', $user->id);
+            }
+        })->first();
+
+        if (!$task) {
+            return response()->json(['message' => 'Task tidak ditemukan atau Anda tidak memiliki akses.'], 404);
+        }
         
         $request->validate([
             'status' => 'required|in:todo,progress,review,done'

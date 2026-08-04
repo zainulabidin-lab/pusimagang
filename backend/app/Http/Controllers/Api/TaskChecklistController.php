@@ -26,6 +26,22 @@ class TaskChecklistController extends Controller
 
     public function toggle($taskId, $id)
     {
+        $user = request()->user();
+        $task = \App\Models\Task::where('id', $taskId)->where(function ($query) use ($user) {
+            if ($user->role === 'intern') {
+                $query->where('intern_id', $user->id)
+                      ->orWhereHas('interns', function ($q) use ($user) {
+                          $q->where('users.id', $user->id);
+                      });
+            } elseif ($user->role === 'mentor') {
+                $query->where('mentor_id', $user->id);
+            }
+        })->first();
+
+        if (!$task) {
+            return response()->json(['message' => 'Task tidak ditemukan atau Anda tidak memiliki akses.'], 404);
+        }
+
         $checklist = TaskChecklist::where('task_id', $taskId)->findOrFail($id);
         $checklist->is_completed = !$checklist->is_completed;
         $checklist->save();
