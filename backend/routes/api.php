@@ -50,6 +50,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::patch('/notifications/{id}/read', [\App\Http\Controllers\Api\NotificationController::class, 'markAsRead']);
     Route::post('/notifications/read-all', [\App\Http\Controllers\Api\NotificationController::class, 'markAllAsRead']);
 
+    // Reports
+    Route::get('/reports/intern/{id}', [\App\Http\Controllers\Api\ReportController::class, 'getInternReport']);
+
     // Master Data
     Route::get('/master/divisions', [\App\Http\Controllers\Api\MasterDataController::class, 'divisions']);
     Route::get('/master/templates', [\App\Http\Controllers\Api\MasterDataController::class, 'templates']);

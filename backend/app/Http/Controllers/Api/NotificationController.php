@@ -1,32 +1,57 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Notification;
+use App\Services\NotificationService;
+use App\Http\Resources\NotificationResource;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class NotificationController extends Controller
 {
-    public function index(Request $request)
+    protected NotificationService $notificationService;
+
+    public function __construct(NotificationService $notificationService)
     {
-        $notifications = Notification::where('user_id', $request->user()->id)
-            ->orderBy('created_at', 'desc')
-            ->take(20)
-            ->get();
-        return response()->json(['data' => $notifications]);
+        $this->notificationService = $notificationService;
     }
 
-    public function markAsRead(Request $request, $id)
+    /**
+     * Get user notifications.
+     */
+    public function index(Request $request): JsonResponse
     {
-        $notification = Notification::where('user_id', $request->user()->id)->findOrFail($id);
-        $notification->update(['is_read' => true]);
-        return response()->json(['message' => 'Tandai dibaca']);
+        $notifications = $this->notificationService->getNotifications($request->user());
+
+        return response()->json([
+            'data' => NotificationResource::collection($notifications)
+        ]);
     }
 
-    public function markAllAsRead(Request $request)
+    /**
+     * Mark a notification as read.
+     */
+    public function markAsRead(Request $request, int $id): JsonResponse
     {
-        Notification::where('user_id', $request->user()->id)->update(['is_read' => true]);
-        return response()->json(['message' => 'Semua ditandai dibaca']);
+        $this->notificationService->markAsRead($request->user(), $id);
+
+        return response()->json([
+            'message' => 'Tandai dibaca'
+        ]);
+    }
+
+    /**
+     * Mark all notifications as read.
+     */
+    public function markAllAsRead(Request $request): JsonResponse
+    {
+        $this->notificationService->markAllAsRead($request->user());
+
+        return response()->json([
+            'message' => 'Semua ditandai dibaca'
+        ]);
     }
 }
