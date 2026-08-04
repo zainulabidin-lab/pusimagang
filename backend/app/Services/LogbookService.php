@@ -58,6 +58,34 @@ class LogbookService implements BaseServiceInterface
 
             $this->applyGamification($user);
 
+            $internProfile = InternProfile::where('user_id', $user->id)->first();
+            if ($internProfile && $internProfile->mentor_id) {
+                Notification::create([
+                    'id' => (string) \Illuminate\Support\Str::uuid(),
+                    'user_id' => $internProfile->mentor_id,
+                    'title' => 'Logbook Menunggu Review',
+                    'message' => "{$user->name} mengumpulkan logbook baru yang membutuhkan review Anda.",
+                    'type' => 'warning',
+                    'link' => '/logbook'
+                ]);
+            }
+
+            // Also notify Admins
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                // Prevent duplicate if admin is the mentor
+                if ($internProfile && $admin->id === $internProfile->mentor_id) continue;
+                
+                Notification::create([
+                    'id' => (string) \Illuminate\Support\Str::uuid(),
+                    'user_id' => $admin->id,
+                    'title' => 'Logbook Menunggu Review (Admin)',
+                    'message' => "Siswa {$user->name} mengumpulkan logbook baru.",
+                    'type' => 'warning',
+                    'link' => '/logbook'
+                ]);
+            }
+
             return $logbook;
         });
     }
