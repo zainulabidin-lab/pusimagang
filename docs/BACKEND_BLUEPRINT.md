@@ -1,3 +1,15 @@
+---
+Version: 1.0
+Status: LOCKED
+Owner: Chief Software Architect
+Approved By: Architecture Review Board
+Approval Date: 04 August 2026
+Last Updated: 04 August 2026
+Document Type: Architecture Core
+Document Purpose: Backend Architecture Blueprint
+Review Cycle: Changes require Architecture Review Board approval
+---
+
 # 🏗️ PUSIM Magang Enterprise v2.0 - Backend Architecture Blueprint
 
 ## 1. Architecture Assessment

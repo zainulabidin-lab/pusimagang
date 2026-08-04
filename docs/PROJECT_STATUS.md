@@ -1,3 +1,15 @@
+---
+Version: 1.0
+Status: LOCKED
+Owner: Engineering Program Manager
+Approved By: Architecture Review Board
+Approval Date: 04 August 2026
+Last Updated: 04 August 2026
+Document Type: Project Dashboard
+Document Purpose: Official engineering status dashboard
+Review Cycle: Changes require Architecture Review Board approval
+---
+
 # 📊 PUSIM Magang Enterprise v2.0 - Project Status Dashboard
 
 **Document Owner:** Engineering Program Manager  

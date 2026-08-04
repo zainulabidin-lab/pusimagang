@@ -1,3 +1,15 @@
+---
+Version: 1.0
+Status: LOCKED
+Owner: Chief Software Architect
+Approved By: Architecture Review Board
+Approval Date: 04 August 2026
+Last Updated: 04 August 2026
+Document Type: Engineering Standards
+Document Purpose: Official engineering handbook and standards
+Review Cycle: Changes require Architecture Review Board approval
+---
+
 # 📘 PUSIM Magang Enterprise v2.0 - Engineering Handbook & Standards
 
 **Version:** 1.0  
