@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useDeferredValue, useMemo } from 'react';
 import api from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
-import { Plus, Smile, Meh, Frown, Clock, Calendar, Search } from 'lucide-react';
+import { Plus, Smile, Meh, Frown, Clock, Calendar, Search, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { Drawer } from '../components/ui/Drawer';
@@ -53,6 +53,11 @@ const Logbook: React.FC = () => {
     const [endTime, setEndTime] = useState('15:00');
     const [mood, setMood] = useState('good');
     const [photo, setPhoto] = useState<File | null>(null);
+    const [expandedInterns, setExpandedInterns] = useState<Record<string, boolean>>({});
+
+    const toggleIntern = (name: string) => {
+        setExpandedInterns(prev => ({ ...prev, [name]: !prev[name] }));
+    };
 
     const fetchLogbook = async () => {
         try {
@@ -324,29 +329,42 @@ const Logbook: React.FC = () => {
                                 return acc;
                             }, {})
                         ).map(([internName, internEntries]: [string, any]) => (
-                            <div key={internName} style={{ marginBottom: 'var(--space-32)' }}>
-                                <h3 style={{ fontSize: 'var(--font-size-h4)', fontWeight: 600, marginBottom: 'var(--space-16)', display: 'flex', alignItems: 'center', gap: 'var(--space-8)' }}>
-                                    <div style={{ width: 32, height: 32, borderRadius: '50%', backgroundColor: 'var(--primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 'var(--font-size-sm)' }}>
-                                        {internName.charAt(0).toUpperCase()}
+                            <div key={internName} style={{ marginBottom: 'var(--space-16)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
+                                <div 
+                                    onClick={() => toggleIntern(internName)} 
+                                    style={{ cursor: 'pointer', padding: 'var(--space-16)', backgroundColor: 'var(--surface)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                                >
+                                    <h3 style={{ fontSize: 'var(--font-size-body)', fontWeight: 600, margin: 0, display: 'flex', alignItems: 'center', gap: 'var(--space-8)' }}>
+                                        <div style={{ width: 32, height: 32, borderRadius: '50%', backgroundColor: 'var(--primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 'var(--font-size-sm)' }}>
+                                            {internName.charAt(0).toUpperCase()}
+                                        </div>
+                                        {internName}
+                                        <Badge variant="neutral">{internEntries.length} entri</Badge>
+                                    </h3>
+                                    <div style={{ color: 'var(--text-muted)' }}>
+                                        {expandedInterns[internName] ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                                     </div>
-                                    {internName}
-                                </h3>
-                                <Timeline items={internEntries.map((entry: any) => ({
-                                    title: (
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-12)' }}>
-                                            <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{new Date(entry.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
-                                            {getStatusBadge(entry.status || 'pending')}
-                                        </div>
-                                    ),
-                                    time: (
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-16)', color: 'var(--text-muted)' }}>
-                                            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={14}/> {entry.start_time?.substring(0,5) || entry.time} - {entry.end_time?.substring(0,5) || 'Done'}</span>
-                                            {getMoodEmoji(entry.mood)}
-                                        </div>
-                                    ),
-                                    description: renderEntryDetails(entry),
-                                    status: getTimelineStatus(entry.status || 'pending')
-                                }))} />
+                                </div>
+                                {expandedInterns[internName] && (
+                                    <div style={{ padding: 'var(--space-24)', borderTop: '1px solid var(--border)' }}>
+                                        <Timeline items={internEntries.map((entry: any) => ({
+                                            title: (
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-12)' }}>
+                                                    <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{new Date(entry.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                                                    {getStatusBadge(entry.status || 'pending')}
+                                                </div>
+                                            ),
+                                            time: (
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-16)', color: 'var(--text-muted)' }}>
+                                                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={14}/> {entry.start_time?.substring(0,5) || entry.time} - {entry.end_time?.substring(0,5) || 'Done'}</span>
+                                                    {getMoodEmoji(entry.mood)}
+                                                </div>
+                                            ),
+                                            description: renderEntryDetails(entry),
+                                            status: getTimelineStatus(entry.status || 'pending')
+                                        }))} />
+                                    </div>
+                                )}
                             </div>
                         ))
                     ) : (
