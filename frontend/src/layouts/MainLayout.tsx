@@ -63,7 +63,7 @@ const MainLayout: React.FC = () => {
                 </div>
                 
                 {/* Fixed Footer */}
-                <footer style={{ textAlign: 'center', padding: '12px var(--space-24)', fontSize: 'var(--font-size-xs)', color: 'var(--text-muted)', borderTop: '1px solid var(--border)', backgroundColor: 'var(--surface)', flexShrink: 0 }}>
+                <footer style={{ textAlign: 'center', padding: '12px var(--space-24)', fontSize: 'var(--font-size-xs)', color: 'var(--text-muted)', flexShrink: 0 }}>
                     &copy; {new Date().getFullYear()} Pusat Teknologi dan Sistem Informasi (PUSIM). All rights reserved.
                 </footer>
             </div>
