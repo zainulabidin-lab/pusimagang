@@ -55,6 +55,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/master/templates', [\App\Http\Controllers\Api\MasterDataController::class, 'templates']);
     Route::get('/master/interns', [\App\Http\Controllers\Api\MasterDataController::class, 'interns']);
     Route::get('/master/competencies', [\App\Http\Controllers\Api\MasterDataController::class, 'competencies']);
+    Route::get('/mentors', [\App\Http\Controllers\Api\MentorController::class, 'index']);
 
     // Competency & Assessments
     Route::prefix('competency')->group(function () {

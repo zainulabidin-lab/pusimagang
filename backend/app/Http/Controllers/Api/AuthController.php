@@ -42,7 +42,7 @@ class AuthController extends Controller
     public function user(Request $request)
     {
         return response()->json([
-            'data' => $request->user()->load(['internProfile']) // Fixed relationship to prevent 500 error on refresh
+            'data' => $request->user()->load(['internProfile', 'mentorProfile.division'])
         ]);
     }
 }
