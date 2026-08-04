@@ -24,6 +24,8 @@ class ActivityFeedController extends Controller
                 $q->where('mentor_id', $user->id);
             });
         }
+        $taskQuery->where('created_at', '>=', '2026-08-03 00:00:00');
+        
         $taskLogs = $taskQuery->latest()->take(30)->get()->map(function($log) {
             return [
                 'id' => 'task_log_' . $log->id,
@@ -45,6 +47,8 @@ class ActivityFeedController extends Controller
                 $q->where('mentor_id', $user->id);
             });
         }
+        $logbookQuery->where('created_at', '>=', '2026-08-03 00:00:00');
+
         $logbooks = $logbookQuery->latest('created_at')->take(30)->get()->map(function($logbook) {
             $action = 'Submitted logbook';
             if ($logbook->status === 'approved') $action = 'Logbook approved';
