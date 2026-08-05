@@ -23,6 +23,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/activity-feed', [\App\Http\Controllers\Api\ActivityFeedController::class, 'index']);
     Route::get('/knowledge-base', [\App\Http\Controllers\Api\KnowledgeBaseController::class, 'index']);
 
+    // Announcements
+    Route::get('/announcements', [\App\Http\Controllers\Api\AnnouncementController::class, 'index']);
+    Route::post('/announcements', [\App\Http\Controllers\Api\AnnouncementController::class, 'store']);
+    Route::delete('/announcements/{id}', [\App\Http\Controllers\Api\AnnouncementController::class, 'destroy']);
+
     // Admin Approval
     Route::get('/admin/pending-interns', [\App\Http\Controllers\Api\AdminApprovalController::class, 'pendingInterns']);
     Route::patch('/admin/approve-intern/{id}', [\App\Http\Controllers\Api\AdminApprovalController::class, 'approveIntern']);

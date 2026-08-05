@@ -20,11 +20,10 @@ import { EmptyState } from '../components/ui/EmptyState';
 
 // Removed mockActivityData as it is now provided by backend
 
-const mockAnnouncements = [
-    { id: 1, title: 'System Maintenance Scheduled', date: '2026-08-10', type: 'warning' },
-    { id: 2, title: 'Logbook Submission Deadline Extended', date: '2026-08-05', type: 'info' },
-    { id: 3, title: 'New Internship Guidelines Available', date: '2026-08-01', type: 'success' },
-];
+import { Drawer } from '../components/ui/Drawer';
+import { Input } from '../components/ui/Input';
+import { Select } from '../components/ui/Select';
+import { Trash2 } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
     const { user } = useAuth();
@@ -57,6 +56,12 @@ const Dashboard: React.FC = () => {
     const [selectedMentor, setSelectedMentor] = useState('');
     const [selectedDivision, setSelectedDivision] = useState('');
     const [activities, setActivities] = useState<any[]>([]);
+    
+    // Announcements state
+    const [announcements, setAnnouncements] = useState<any[]>([]);
+    const [isAnnouncementDrawerOpen, setIsAnnouncementDrawerOpen] = useState(false);
+    const [isSubmittingAnnouncement, setIsSubmittingAnnouncement] = useState(false);
+    const [newAnnouncement, setNewAnnouncement] = useState({ title: '', message: '', type: 'info' });
 
     const fetchDashboard = async () => {
         try {
@@ -68,6 +73,13 @@ const Dashboard: React.FC = () => {
                 setActivities(notifRes.data.data);
             } catch (e) {
                 console.error("Failed to fetch activities", e);
+            }
+
+            try {
+                const annRes = await api.get('/announcements');
+                setAnnouncements(annRes.data.data);
+            } catch (e) {
+                console.error("Failed to fetch announcements", e);
             }
 
             if (user?.role !== 'intern') {
@@ -137,6 +149,35 @@ const Dashboard: React.FC = () => {
             fetchDashboard();
         } catch (error) {
             addToast('Gagal', `Gagal mengubah status logbook`, 'error');
+        }
+    };
+
+    const handleCreateAnnouncement = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmittingAnnouncement(true);
+        try {
+            await api.post('/announcements', newAnnouncement);
+            setIsAnnouncementDrawerOpen(false);
+            setNewAnnouncement({ title: '', message: '', type: 'info' });
+            addToast('Berhasil', 'Pengumuman berhasil dibuat', 'success');
+            
+            const annRes = await api.get('/announcements');
+            setAnnouncements(annRes.data.data);
+        } catch (error) {
+            addToast('Gagal', 'Gagal membuat pengumuman', 'error');
+        } finally {
+            setIsSubmittingAnnouncement(false);
+        }
+    };
+
+    const handleDeleteAnnouncement = async (id: number) => {
+        if (!confirm('Hapus pengumuman ini?')) return;
+        try {
+            await api.delete(`/announcements/${id}`);
+            addToast('Berhasil', 'Pengumuman dihapus', 'success');
+            setAnnouncements(prev => prev.filter(a => a.id !== id));
+        } catch (error) {
+            addToast('Gagal', 'Gagal menghapus pengumuman', 'error');
         }
     };
 
@@ -451,17 +492,36 @@ const Dashboard: React.FC = () => {
             {/* ANNOUNCEMENTS (Full Width Bottom) */}
             <div className="bento-grid">
                 <Card className="bento-item col-span-12">
-                    <CardHeader>
+                    <CardHeader style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <CardTitle style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-8)' }}><Megaphone size={18}/> System Announcements</CardTitle>
+                        {user?.role !== 'intern' && (
+                            <Button variant="outline" size="sm" leftIcon={<Plus size={16} />} onClick={() => setIsAnnouncementDrawerOpen(true)}>
+                                New Announcement
+                            </Button>
+                        )}
                     </CardHeader>
                     <CardContent>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-16)' }}>
-                            {mockAnnouncements.map(ann => (
-                                <div key={ann.id} style={{ padding: 'var(--space-16)', backgroundColor: `var(--${ann.type}-light, var(--surface-hover))`, borderRadius: 'var(--radius-md)', borderLeft: `4px solid var(--${ann.type})` }}>
-                                    <h4 style={{ margin: '0 0 4px 0', fontSize: 'var(--font-size-button)', fontWeight: 600 }}>{ann.title}</h4>
-                                    <span style={{ fontSize: 'var(--font-size-caption)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                        <CalendarIcon size={12}/> {ann.date}
-                                    </span>
+                            {announcements.length === 0 ? (
+                                <EmptyState 
+                                    icon={<Megaphone size={48} />}
+                                    title="No Announcements"
+                                    description="There are currently no system announcements."
+                                />
+                            ) : announcements.map(ann => (
+                                <div key={ann.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', padding: 'var(--space-16)', backgroundColor: `var(--${ann.type}-light, var(--surface-hover))`, borderRadius: 'var(--radius-md)', borderLeft: `4px solid var(--${ann.type})` }}>
+                                    <div style={{ flex: 1, paddingRight: 'var(--space-12)' }}>
+                                        <h4 style={{ margin: '0 0 4px 0', fontSize: 'var(--font-size-button)', fontWeight: 600 }}>{ann.title}</h4>
+                                        <p style={{ margin: '0 0 8px 0', fontSize: 'var(--font-size-sm)', color: 'var(--text-main)', lineHeight: 1.5 }}>{ann.message}</p>
+                                        <span style={{ fontSize: 'var(--font-size-caption)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                            <CalendarIcon size={12}/> {ann.date} • By {ann.author}
+                                        </span>
+                                    </div>
+                                    {user?.role !== 'intern' && (
+                                        <button onClick={() => handleDeleteAnnouncement(ann.id)} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '4px', borderRadius: '4px', transition: 'background 0.2s' }} title="Delete Announcement" onMouseOver={e=>e.currentTarget.style.backgroundColor='rgba(239, 68, 68, 0.1)'} onMouseOut={e=>e.currentTarget.style.backgroundColor='transparent'}>
+                                            <Trash2 size={16} color="var(--danger)" />
+                                        </button>
+                                    )}
                                 </div>
                             ))}
                         </div>
@@ -579,6 +639,49 @@ const Dashboard: React.FC = () => {
                 </div>
             )}
             
+            {/* Announcement Drawer */}
+            <Drawer 
+                isOpen={isAnnouncementDrawerOpen} 
+                onClose={() => setIsAnnouncementDrawerOpen(false)}
+                title="Create Announcement"
+                description="Broadcast a message to all interns."
+                size="md"
+            >
+                <form onSubmit={handleCreateAnnouncement} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-16)' }}>
+                    <div>
+                        <label style={{ display: 'block', marginBottom: '8px', fontSize: 'var(--font-size-sm)', fontWeight: 500 }}>Title</label>
+                        <Input value={newAnnouncement.title} onChange={(e) => setNewAnnouncement({...newAnnouncement, title: e.target.value})} placeholder="e.g., System Maintenance" required fullWidth />
+                    </div>
+                    <div>
+                        <label style={{ display: 'block', marginBottom: '8px', fontSize: 'var(--font-size-sm)', fontWeight: 500 }}>Message</label>
+                        <textarea 
+                            value={newAnnouncement.message} 
+                            onChange={(e) => setNewAnnouncement({...newAnnouncement, message: e.target.value})} 
+                            placeholder="Type your announcement here..."
+                            required
+                            style={{ width: '100%', minHeight: '120px', padding: 'var(--space-12)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', fontFamily: 'inherit', resize: 'vertical' }}
+                        />
+                    </div>
+                    <div>
+                        <label style={{ display: 'block', marginBottom: '8px', fontSize: 'var(--font-size-sm)', fontWeight: 500 }}>Type</label>
+                        <Select 
+                            value={newAnnouncement.type} 
+                            onChange={(e) => setNewAnnouncement({...newAnnouncement, type: e.target.value})} 
+                            options={[
+                                {value: 'info', label: 'Info (Blue)'},
+                                {value: 'success', label: 'Success (Green)'},
+                                {value: 'warning', label: 'Warning (Yellow)'},
+                                {value: 'danger', label: 'Danger (Red)'}
+                            ]} 
+                        />
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--space-12)', paddingTop: 'var(--space-16)', borderTop: '1px solid var(--border)' }}>
+                        <Button type="button" variant="ghost" onClick={() => setIsAnnouncementDrawerOpen(false)} disabled={isSubmittingAnnouncement}>Cancel</Button>
+                        <Button type="submit" variant="primary" disabled={isSubmittingAnnouncement}>{isSubmittingAnnouncement ? 'Broadcasting...' : 'Broadcast Announcement'}</Button>
+                    </div>
+                </form>
+            </Drawer>
+
             <ToastContainer toasts={toasts} />
         </div>
     );
