@@ -31,6 +31,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Tasks & Checklists
     Route::get('/tasks', [\App\Http\Controllers\Api\TaskController::class, 'index']);
     Route::post('/tasks', [\App\Http\Controllers\Api\TaskController::class, 'store']);
+    Route::put('/tasks/{id}', [\App\Http\Controllers\Api\TaskController::class, 'update']);
     Route::patch('/tasks/{id}/status', [\App\Http\Controllers\Api\TaskController::class, 'updateStatus']);
     
     Route::post('/tasks/{taskId}/checklists', [\App\Http\Controllers\Api\TaskChecklistController::class, 'store']);

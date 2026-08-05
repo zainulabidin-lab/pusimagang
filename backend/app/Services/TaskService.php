@@ -99,6 +99,41 @@ class TaskService implements BaseServiceInterface
     }
 
     /**
+     * Update an existing task.
+     *
+     * @param Task $task
+     * @param User $user
+     * @param array $data
+     * @return Task
+     */
+    public function updateTask(Task $task, User $user, array $data): Task
+    {
+        return DB::transaction(function () use ($task, $user, $data) {
+            $task->update([
+                'title' => $data['title'],
+                'description' => $data['description'] ?? '',
+                'priority' => $data['priority'],
+                'deadline' => $data['deadline'] ?? null,
+                'competency_id' => $data['competency_id'] ?? null,
+                'difficulty' => $data['difficulty'] ?? 'easy',
+            ]);
+
+            if (isset($data['intern_ids'])) {
+                $task->interns()->sync($data['intern_ids']);
+            }
+
+            TaskLog::create([
+                'task_id' => $task->id,
+                'user_id' => $user->id,
+                'action' => 'updated',
+                'details' => 'Memperbarui detail task',
+            ]);
+
+            return $task->load(['interns', 'checklists']);
+        });
+    }
+
+    /**
      * Update task status and handle gamification.
      *
      * @param Task $task

@@ -60,6 +60,27 @@ class TaskController extends Controller
     }
 
     /**
+     * Update the specified task.
+     *
+     * @param StoreTaskRequest $request
+     * @param int|string $id
+     * @return JsonResponse
+     */
+    public function update(StoreTaskRequest $request, $id): JsonResponse
+    {
+        $task = Task::findOrFail($id);
+        
+        $this->authorize('update', $task);
+
+        try {
+            $task = $this->taskService->updateTask($task, $request->user(), $request->validated());
+            return $this->sendSuccess(new TaskResource($task), 'Task updated successfully');
+        } catch (BusinessException $e) {
+            return $e->render();
+        }
+    }
+
+    /**
      * Update the specified task status.
      *
      * @param UpdateTaskStatusRequest $request

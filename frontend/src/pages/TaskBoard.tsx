@@ -23,6 +23,7 @@ const TaskBoard: React.FC = () => {
     const [isCreateDrawerOpen, setIsCreateDrawerOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [newTask, setNewTask] = useState({ title: '', description: '', priority: 'medium', deadline: '', intern_ids: [] as number[], template_id: '', competency_id: '', difficulty: 'easy' });
+    const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
 
     const [selectedTask, setSelectedTask] = useState<any>(null);
     const [isDetailDrawerOpen, setIsDetailDrawerOpen] = useState(false);
@@ -63,7 +64,7 @@ const TaskBoard: React.FC = () => {
         fetchData();
     }, []);
 
-    const handleCreateTask = async (e: React.FormEvent) => {
+    const handleSubmitTask = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
         try {
@@ -76,17 +77,28 @@ const TaskBoard: React.FC = () => {
                 }
             }
 
-            await api.post('/tasks', { 
+            const payload = { 
                 ...newTask, 
                 intern_ids: finalInternIds,
                 template_id: newTask.template_id ? newTask.template_id : null,
                 competency_id: newTask.competency_id ? newTask.competency_id : null
-            });
+            };
+
+            if (editingTaskId) {
+                await api.put(`/tasks/${editingTaskId}`, payload);
+                if (selectedTask && selectedTask.id === editingTaskId) {
+                    setSelectedTask(null);
+                }
+            } else {
+                await api.post('/tasks', payload);
+            }
+
             setIsCreateDrawerOpen(false);
+            setEditingTaskId(null);
             setNewTask({ title: '', description: '', priority: 'medium', deadline: '', intern_ids: [], template_id: '', competency_id: '', difficulty: 'easy' });
             fetchData();
         } catch (error: any) {
-            alert('Gagal membuat task: ' + (error.response?.data?.message || 'Server error'));
+            alert(`Gagal ${editingTaskId ? 'mengubah' : 'membuat'} task: ` + (error.response?.data?.message || 'Server error'));
         } finally {
             setIsSubmitting(false);
         }
@@ -338,12 +350,12 @@ const TaskBoard: React.FC = () => {
             {/* Create Task Drawer */}
             <Drawer 
                 isOpen={isCreateDrawerOpen} 
-                onClose={() => setIsCreateDrawerOpen(false)}
-                title="Create New Task"
-                description="Assign tasks to interns and set deadlines."
+                onClose={() => { setIsCreateDrawerOpen(false); setEditingTaskId(null); setNewTask({ title: '', description: '', priority: 'medium', deadline: '', intern_ids: [], template_id: '', competency_id: '', difficulty: 'easy' }); }}
+                title={editingTaskId ? "Edit Task" : "Create New Task"}
+                description={editingTaskId ? "Update task details." : "Assign tasks to interns and set deadlines."}
                 size="md"
             >
-                <form onSubmit={handleCreateTask} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-16)' }}>
+                <form onSubmit={handleSubmitTask} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-16)' }}>
                     <div>
                         <label style={{ display: 'block', marginBottom: '8px', fontSize: 'var(--font-size-sm)', fontWeight: 500 }}>Task Title</label>
                         <Input value={newTask.title} onChange={(e) => setNewTask({...newTask, title: e.target.value})} placeholder="e.g., Design new landing page" required fullWidth />
@@ -375,10 +387,12 @@ const TaskBoard: React.FC = () => {
                         {user?.role !== 'intern' && newTask.intern_ids.length === 0 && <span style={{ fontSize: 'var(--font-size-xs)', color: 'var(--danger)', marginTop: '4px', display: 'block' }}>Please select at least one intern</span>}
                     </div>
 
-                    <div>
-                        <label style={{ display: 'block', marginBottom: '8px', fontSize: 'var(--font-size-sm)', fontWeight: 500 }}>Use SOP Template (Optional)</label>
-                        <Select value={newTask.template_id} onChange={(e) => setNewTask({...newTask, template_id: e.target.value})} options={[{value:'', label:'-- Select Template --'}, ...templates.map(t => ({value: t.id, label: t.name}))]} />
-                    </div>
+                    {!editingTaskId && (
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '8px', fontSize: 'var(--font-size-sm)', fontWeight: 500 }}>Use SOP Template (Optional)</label>
+                            <Select value={newTask.template_id} onChange={(e) => setNewTask({...newTask, template_id: e.target.value})} options={[{value:'', label:'-- Select Template --'}, ...templates.map(t => ({value: t.id, label: t.name}))]} />
+                        </div>
+                    )}
                     
                     <div style={{ display: 'flex', gap: 'var(--space-12)', backgroundColor: 'var(--surface)', padding: 'var(--space-12)', borderRadius: 'var(--radius-md)' }}>
                         <div style={{ flex: 1 }}>
@@ -415,8 +429,8 @@ const TaskBoard: React.FC = () => {
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--space-12)', paddingTop: 'var(--space-16)', borderTop: '1px solid var(--border)' }}>
-                        <Button type="button" variant="ghost" onClick={() => setIsCreateDrawerOpen(false)} disabled={isSubmitting}>Cancel</Button>
-                        <Button type="submit" variant="primary" disabled={isSubmitting}>{isSubmitting ? 'Creating...' : 'Create Task'}</Button>
+                        <Button type="button" variant="ghost" onClick={() => { setIsCreateDrawerOpen(false); setEditingTaskId(null); setNewTask({ title: '', description: '', priority: 'medium', deadline: '', intern_ids: [], template_id: '', competency_id: '', difficulty: 'easy' }); }} disabled={isSubmitting}>Cancel</Button>
+                        <Button type="submit" variant="primary" disabled={isSubmitting}>{isSubmitting ? 'Saving...' : (editingTaskId ? 'Save Changes' : 'Create Task')}</Button>
                     </div>
                 </form>
             </Drawer>
@@ -430,6 +444,23 @@ const TaskBoard: React.FC = () => {
                     size="md"
                     footer={
                         <div style={{ display: 'flex', gap: 'var(--space-12)', width: '100%', justifyContent: 'flex-end' }}>
+                            {user?.role !== 'intern' && (
+                                <Button variant="outline" onClick={() => {
+                                    setEditingTaskId(selectedTask.id);
+                                    setNewTask({
+                                        title: selectedTask.title,
+                                        description: selectedTask.description || '',
+                                        priority: selectedTask.priority,
+                                        deadline: selectedTask.deadline ? selectedTask.deadline.split('T')[0] : '',
+                                        intern_ids: selectedTask.interns?.map((i:any) => i.id) || [],
+                                        template_id: '',
+                                        competency_id: selectedTask.competency_id || '',
+                                        difficulty: selectedTask.difficulty || 'easy'
+                                    });
+                                    setIsDetailDrawerOpen(false);
+                                    setTimeout(() => setIsCreateDrawerOpen(true), 300);
+                                }}>Edit Task</Button>
+                            )}
                             {selectedTask.status === 'todo' && user?.role === 'intern' && <Button variant="primary" onClick={() => handleMoveTask(selectedTask.id, 'progress')}>Start Task</Button>}
                             {selectedTask.status === 'progress' && user?.role === 'intern' && <Button variant="primary" onClick={() => handleMoveTask(selectedTask.id, 'review')}>Submit for Review</Button>}
                             {selectedTask.status === 'review' && user?.role !== 'intern' && (
