@@ -339,7 +339,7 @@ const Logbook: React.FC = () => {
                                             {internName.charAt(0).toUpperCase()}
                                         </div>
                                         {internName}
-                                        <Badge variant="neutral">{internEntries.length} entri</Badge>
+                                        <Badge variant="default">{internEntries.length} entri</Badge>
                                     </h3>
                                     <div style={{ color: 'var(--text-muted)' }}>
                                         {expandedInterns[internName] ? <ChevronUp size={20} /> : <ChevronDown size={20} />}

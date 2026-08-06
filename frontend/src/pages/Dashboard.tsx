@@ -196,7 +196,7 @@ const Dashboard: React.FC = () => {
     ];
 
     const timelineItems = activities.slice(0, 5).map(notif => {
-        let statusStr = 'primary';
+        let statusStr: "primary" | "success" | "danger" | "warning" | "default" = 'primary';
         if (notif.type?.includes('approve') || notif.type?.includes('success')) statusStr = 'success';
         else if (notif.type?.includes('reject') || notif.type?.includes('fail')) statusStr = 'danger';
         else if (notif.type?.includes('task') || notif.type?.includes('warning')) statusStr = 'warning';

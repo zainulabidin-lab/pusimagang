@@ -35,7 +35,7 @@ const History: React.FC = () => {
     }
 
     const timelineItems = activities.map(act => {
-        let statusStr = 'primary';
+        let statusStr: "primary" | "success" | "danger" | "warning" | "default" = 'primary';
         const actionLower = act.action?.toLowerCase() || '';
         
         if (actionLower.includes('approve') || actionLower.includes('done')) statusStr = 'success';
